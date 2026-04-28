@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-04-28T20:06:00Z",
+  "overall": "operational",
+  "components": [
+    {
+      "id": "website",
+      "name": "Website (nauticgrid.xyz)",
+      "status": "operational",
+      "lastChecked": "2026-04-28T20:06:00Z",
+      "description": "Main web application"
+    },
+    {
+      "id": "worker",
+      "name": "Background worker",
+      "status": "operational",
+      "lastChecked": "2026-04-28T20:06:00Z",
+      "description": "Cron tasks, ingest, and async updates"
+    },
+    {
+      "id": "database",
+      "name": "Database (PostgreSQL)",
+      "status": "operational",
+      "lastChecked": "2026-04-28T20:06:00Z",
+      "description": "Railway managed Postgres"
+    }
+  ],
+  "incidents": [],
+  "maintenance": []
+}
