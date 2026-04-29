@@ -1,0 +1,45 @@
+name: Update Status Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      overall:
+        description: "Overall status"
+        required: true
+        default: "operational"
+        type: choice
+        options:
+          - operational
+          - degraded
+          - down
+          - maintenance
+      update_note:
+        description: "Optional note for latest incident"
+        required: false
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update top-level status fields
+        run: |
+          node -e "
+          const fs=require('fs');
+          const f='status.json';
+          const s=JSON.parse(fs.readFileSync(f,'utf8'));
+          s.updatedAt=new Date().toISOString();
+          s.overall='${{ github.event.inputs.overall }}';
+          if ('${{ github.event.inputs.update_note }}' && Array.isArray(s.incidents) && s.incidents.length>0) {
+            s.incidents[0].latestUpdate='${{ github.event.inputs.update_note }}';
+          }
+          fs.writeFileSync(f, JSON.stringify(s,null,2)+'\n');
+          "
+      - name: Commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: status.json
+          message: "chore(status): manual status update"

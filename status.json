@@ -1,29 +1,119 @@
 {
-  "updatedAt": "2026-04-28T20:06:00Z",
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2026-04-29T01:05:00Z",
   "overall": "operational",
-  "components": [
+  "services": [
     {
-      "id": "website",
+      "id": "web",
       "name": "Website (nauticgrid.xyz)",
       "status": "operational",
-      "lastChecked": "2026-04-28T20:06:00Z",
-      "description": "Main web application"
+      "lastChecked": "2026-04-29T01:05:00Z",
+      "description": "Next.js web application on Railway",
+      "sloTarget": "99.9%"
     },
     {
       "id": "worker",
-      "name": "Background worker",
+      "name": "Worker",
       "status": "operational",
-      "lastChecked": "2026-04-28T20:06:00Z",
-      "description": "Cron tasks, ingest, and async updates"
+      "lastChecked": "2026-04-29T01:05:00Z",
+      "description": "Background jobs and data refresh routines",
+      "sloTarget": "99.5%"
     },
     {
-      "id": "database",
-      "name": "Database (PostgreSQL)",
+      "id": "db",
+      "name": "PostgreSQL",
       "status": "operational",
-      "lastChecked": "2026-04-28T20:06:00Z",
-      "description": "Railway managed Postgres"
+      "lastChecked": "2026-04-29T01:05:00Z",
+      "description": "Primary relational data store",
+      "sloTarget": "99.95%"
     }
   ],
-  "incidents": [],
-  "maintenance": []
+  "cronJobs": [
+    {
+      "id": "ingest-feeds",
+      "name": "Feed ingest",
+      "status": "operational",
+      "schedule": "hourly",
+      "lastSuccessAt": "2026-04-29T00:00:20Z",
+      "currentLagMinutes": 65,
+      "alertAfterMinutes": 180,
+      "lastError": null
+    },
+    {
+      "id": "update-market",
+      "name": "Market update",
+      "status": "degraded",
+      "schedule": "hourly",
+      "lastSuccessAt": "2026-04-28T20:10:00Z",
+      "currentLagMinutes": 295,
+      "alertAfterMinutes": 180,
+      "lastError": "Yahoo finance upstream timeout spikes"
+    },
+    {
+      "id": "disruption-index",
+      "name": "Disruption index",
+      "status": "operational",
+      "schedule": "daily 02:00 UTC",
+      "lastSuccessAt": "2026-04-28T02:00:06Z",
+      "currentLagMinutes": 1385,
+      "alertAfterMinutes": 2880,
+      "lastError": null
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "imf-portwatch",
+      "name": "IMF PortWatch",
+      "type": "data-provider",
+      "status": "degraded",
+      "lastChecked": "2026-04-29T01:05:00Z",
+      "note": "Intermittent DNS and timeout errors"
+    },
+    {
+      "id": "yahoo-finance",
+      "name": "Yahoo Finance",
+      "type": "data-provider",
+      "status": "degraded",
+      "lastChecked": "2026-04-29T01:05:00Z",
+      "note": "Occasional fetch failures, DB fallback active"
+    },
+    {
+      "id": "groq-openrouter-deepseek-cerebras",
+      "name": "AI providers",
+      "type": "llm",
+      "status": "operational",
+      "lastChecked": "2026-04-29T01:05:00Z",
+      "note": "Ordered failover enabled"
+    }
+  ],
+  "aiRouting": {
+    "order": ["groq", "openrouter", "deepseek", "cerebras"],
+    "activeProvider": "groq",
+    "providers": [
+      { "id": "groq", "configured": true, "pausedUntil": null },
+      { "id": "openrouter", "configured": true, "pausedUntil": null },
+      { "id": "deepseek", "configured": true, "pausedUntil": null },
+      { "id": "cerebras", "configured": true, "pausedUntil": null }
+    ]
+  },
+  "deployments": [
+    {
+      "service": "nauticgrid",
+      "status": "operational",
+      "environment": "production",
+      "commitSha": "87e90e0",
+      "deployedAt": "2026-04-28T23:34:00Z",
+      "buildUrl": "https://railway.com/project/5b50bd9c-3a2d-4dda-968d-bda2c6136e9a"
+    },
+    {
+      "service": "worker",
+      "status": "operational",
+      "environment": "production",
+      "commitSha": "87e90e0",
+      "deployedAt": "2026-04-28T23:34:00Z",
+      "buildUrl": "https://railway.com/project/5b50bd9c-3a2d-4dda-968d-bda2c6136e9a"
+    }
+  ],
+  "maintenance": [],
+  "incidents": []
 }

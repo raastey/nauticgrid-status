@@ -5,45 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NauticGrid Status</title>
     <style>
-      :root {
-        --bg: #0b1220;
-        --card: #121b2e;
-        --text: #d9e2f2;
-        --muted: #8ca0c1;
-        --ok: #10b981;
-        --warn: #f59e0b;
-        --bad: #ef4444;
-      }
+      :root { --bg:#0b1220; --card:#121b2e; --text:#d9e2f2; --muted:#8ca0c1; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444; --maint:#3b82f6; }
       * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-      }
-      .wrap { max-width: 920px; margin: 0 auto; padding: 28px 16px 56px; }
-      .top { margin-bottom: 20px; }
-      h1 { margin: 0 0 8px; font-size: 32px; }
-      .muted { color: var(--muted); font-size: 14px; }
-      .badge {
-        display: inline-block; margin-top: 10px; padding: 6px 10px; border-radius: 999px;
-        font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
-      }
-      .operational { background: rgba(16, 185, 129, 0.16); color: var(--ok); }
-      .degraded { background: rgba(245, 158, 11, 0.16); color: var(--warn); }
-      .down { background: rgba(239, 68, 68, 0.16); color: var(--bad); }
-      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 18px; }
-      .card { background: var(--card); border: 1px solid #22314e; border-radius: 12px; padding: 12px; }
-      .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-      .dot { width: 9px; height: 9px; border-radius: 999px; display: inline-block; margin-right: 6px; }
-      .dot-operational { background: var(--ok); }
-      .dot-degraded { background: var(--warn); }
-      .dot-down { background: var(--bad); }
-      .incidents { margin-top: 22px; }
-      .incident { background: var(--card); border: 1px solid #22314e; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
-      .incident h3 { margin: 0 0 6px; font-size: 16px; }
-      .empty { color: var(--muted); font-size: 14px; }
-      a { color: #7dd3fc; text-decoration: none; }
+      body { margin:0; font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+      .wrap { max-width:1050px; margin:0 auto; padding:28px 16px 56px; }
+      .top { margin-bottom:18px; }
+      h1 { margin:0 0 8px; font-size:32px; }
+      h2 { margin:0 0 10px; font-size:18px; }
+      h3 { margin:0 0 6px; font-size:15px; }
+      .muted { color:var(--muted); font-size:13px; }
+      .badge { display:inline-block; margin-top:10px; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+      .operational { background:rgba(16,185,129,.16); color:var(--ok); }
+      .degraded { background:rgba(245,158,11,.16); color:var(--warn); }
+      .down { background:rgba(239,68,68,.16); color:var(--bad); }
+      .maintenance { background:rgba(59,130,246,.16); color:var(--maint); }
+      .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
+      .card, .line { background:var(--card); border:1px solid #22314e; border-radius:12px; padding:12px; }
+      .line { margin-bottom:10px; }
+      .row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+      .dot { width:9px; height:9px; border-radius:999px; display:inline-block; margin-right:6px; }
+      .dot-operational { background:var(--ok); } .dot-degraded { background:var(--warn); } .dot-down { background:var(--bad); } .dot-maintenance { background:var(--maint); }
+      section { margin-top:18px; }
+      .pill { display:inline-block; padding:2px 8px; border:1px solid #31476f; border-radius:999px; font-size:11px; color:var(--muted); }
+      .stack { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+      .empty { color:var(--muted); font-size:14px; }
+      a { color:#7dd3fc; text-decoration:none; }
     </style>
   </head>
   <body>
@@ -55,75 +41,115 @@
       </section>
 
       <section>
-        <h2>Components</h2>
-        <div id="components" class="grid"></div>
+        <h2>Core Services</h2>
+        <div id="services" class="grid"></div>
       </section>
 
-      <section class="incidents">
-        <h2>Recent incidents</h2>
+      <section>
+        <h2>Cron and Data Pipelines</h2>
+        <div id="cron"></div>
+      </section>
+
+      <section>
+        <h2>External Dependencies</h2>
+        <div id="deps" class="grid"></div>
+      </section>
+
+      <section>
+        <h2>AI Provider Routing</h2>
+        <div id="ai"></div>
+      </section>
+
+      <section>
+        <h2>Deployments</h2>
+        <div id="deployments"></div>
+      </section>
+
+      <section>
+        <h2>Scheduled Maintenance</h2>
+        <div id="maintenance"></div>
+      </section>
+
+      <section>
+        <h2>Incidents</h2>
         <div id="incidents"></div>
       </section>
 
-      <p class="muted" style="margin-top: 24px;">
-        Auto-refresh every 60s · JSON endpoint:
-        <a href="./status.json">status.json</a>
-      </p>
+      <p class="muted" style="margin-top:24px;">Auto-refresh every 60s · JSON endpoint: <a href="./status.json">status.json</a></p>
     </main>
 
     <script>
-      const label = (s) => s === "down" ? "Down" : s === "degraded" ? "Degraded" : "Operational";
-      const dotClass = (s) => s === "down" ? "dot-down" : s === "degraded" ? "dot-degraded" : "dot-operational";
-      function fmt(ts) {
-        if (!ts) return "n/a";
-        return new Date(ts).toLocaleString("en-US", { timeZone: "UTC", hour12: false }) + " UTC";
+      const label = (s) => s === "down" ? "Down" : s === "degraded" ? "Degraded" : s === "maintenance" ? "Maintenance" : "Operational";
+      const dotClass = (s) => s === "down" ? "dot-down" : s === "degraded" ? "dot-degraded" : s === "maintenance" ? "dot-maintenance" : "dot-operational";
+      function fmt(ts) { if (!ts) return "n/a"; return new Date(ts).toLocaleString("en-US", { timeZone: "UTC", hour12: false }) + " UTC"; }
+      function esc(v) { return String(v ?? "").replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m])); }
+
+      function renderCards(targetId, rows, rowBuilder) {
+        const el = document.getElementById(targetId);
+        if (!rows || rows.length === 0) { el.innerHTML = '<p class="empty">No data.</p>'; return; }
+        el.innerHTML = "";
+        rows.forEach((r) => {
+          const node = document.createElement("article");
+          node.className = targetId === "cron" || targetId === "deployments" || targetId === "incidents" || targetId === "maintenance" || targetId === "ai" ? "line" : "card";
+          node.innerHTML = rowBuilder(r);
+          el.appendChild(node);
+        });
       }
+
       async function render() {
         const res = await fetch("./status.json", { cache: "no-store" });
         const data = await res.json();
-        const overall = data.overall || "operational";
-        const overallEl = document.getElementById("overall");
-        overallEl.className = `badge ${overall}`;
-        overallEl.textContent = label(overall);
-        document.getElementById("updatedAt").textContent = `Last updated ${fmt(data.updatedAt)}`;
+        document.getElementById("overall").className = `badge ${data.overall || "operational"}`;
+        document.getElementById("overall").textContent = label(data.overall || "operational");
+        document.getElementById("updatedAt").textContent = `Last updated ${fmt(data.updatedAt)} · schema v${esc(data.schemaVersion || "1")}`;
 
-        const compWrap = document.getElementById("components");
-        compWrap.innerHTML = "";
-        (data.components || []).forEach((c) => {
-          const el = document.createElement("article");
-          el.className = "card";
-          el.innerHTML = `
-            <div class="row">
-              <strong>${c.name}</strong>
-              <span><span class="dot ${dotClass(c.status)}"></span>${label(c.status)}</span>
-            </div>
-            <div class="muted" style="margin-top:6px;">${c.description || ""}</div>
-            <div class="muted" style="margin-top:6px;">Checked ${fmt(c.lastChecked)}</div>
-          `;
-          compWrap.appendChild(el);
-        });
+        renderCards("services", data.services, (s) => `
+          <div class="row"><strong>${esc(s.name)}</strong><span><span class="dot ${dotClass(s.status)}"></span>${label(s.status)}</span></div>
+          <div class="muted" style="margin-top:6px;">${esc(s.description || "")}</div>
+          <div class="muted" style="margin-top:6px;">Checked ${fmt(s.lastChecked)} · SLO ${esc(s.sloTarget || "n/a")}</div>
+        `);
 
-        const incWrap = document.getElementById("incidents");
-        const incidents = data.incidents || [];
-        if (!incidents.length) {
-          incWrap.innerHTML = '<p class="empty">No incidents reported.</p>';
-          return;
-        }
-        incWrap.innerHTML = "";
-        incidents.slice(0, 8).forEach((i) => {
-          const el = document.createElement("article");
-          el.className = "incident";
-          const latest = i.updates && i.updates.length ? i.updates[0].message : "No details";
-          el.innerHTML = `
-            <h3>${i.title}</h3>
-            <div class="muted">${label(i.status)} · ${i.severity || "info"} · ${fmt(i.createdAt)}</div>
-            <div style="margin-top:8px;">${latest}</div>
-          `;
-          incWrap.appendChild(el);
-        });
+        renderCards("cron", data.cronJobs, (c) => `
+          <div class="row"><strong>${esc(c.name)}</strong><span><span class="dot ${dotClass(c.status)}"></span>${label(c.status)}</span></div>
+          <div class="muted">Last success ${fmt(c.lastSuccessAt)} · Expected every ${esc(c.schedule || "n/a")}</div>
+          <div class="muted">Lag ${esc(c.currentLagMinutes ?? "n/a")} min · Alert after ${esc(c.alertAfterMinutes ?? "n/a")} min</div>
+          ${c.lastError ? `<div style="margin-top:6px;">Latest error: ${esc(c.lastError)}</div>` : ""}
+        `);
+
+        renderCards("deps", data.dependencies, (d) => `
+          <div class="row"><strong>${esc(d.name)}</strong><span><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
+          <div class="muted">${esc(d.type || "dependency")} · Checked ${fmt(d.lastChecked)}</div>
+          ${d.note ? `<div class="muted" style="margin-top:6px;">${esc(d.note)}</div>` : ""}
+        `);
+
+        const ai = data.aiRouting ? [data.aiRouting] : [];
+        renderCards("ai", ai, (a) => `
+          <div class="row"><strong>Active provider</strong><span class="pill">${esc(a.activeProvider || "none")}</span></div>
+          <div class="muted">Order: ${esc((a.order || []).join(" -> "))}</div>
+          <div class="stack">
+            ${(a.providers || []).map((p) => `<span class="pill">${esc(p.id)}: ${p.configured ? "configured" : "not configured"}${p.pausedUntil ? `, paused until ${esc(fmt(p.pausedUntil))}` : ""}</span>`).join("")}
+          </div>
+        `);
+
+        renderCards("deployments", data.deployments, (d) => `
+          <div class="row"><strong>${esc(d.service)}</strong><span><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
+          <div class="muted">Commit ${esc(d.commitSha || "n/a")} · ${esc(d.environment || "prod")} · Deployed ${fmt(d.deployedAt)}</div>
+          ${d.buildUrl ? `<div class="muted"><a href="${esc(d.buildUrl)}" target="_blank" rel="noreferrer">Build logs</a></div>` : ""}
+        `);
+
+        renderCards("maintenance", data.maintenance, (m) => `
+          <div class="row"><strong>${esc(m.title)}</strong><span class="pill">${esc(m.status || "scheduled")}</span></div>
+          <div class="muted">${fmt(m.startAt)} to ${fmt(m.endAt)} · Impact: ${esc(m.impact || "n/a")}</div>
+        `);
+
+        renderCards("incidents", data.incidents, (i) => `
+          <div class="row"><strong>${esc(i.title)}</strong><span><span class="dot ${dotClass(i.status)}"></span>${label(i.status)}</span></div>
+          <div class="muted">${esc(i.severity || "minor")} · Started ${fmt(i.createdAt)}${i.resolvedAt ? ` · Resolved ${fmt(i.resolvedAt)}` : ""}</div>
+          <div style="margin-top:6px;">${esc(i.latestUpdate || "No details")}</div>
+        `);
       }
-      render().catch((e) => {
-        document.getElementById("updatedAt").textContent = `Failed to load status: ${e.message}`;
-      });
+
+      render().catch((e) => { document.getElementById("updatedAt").textContent = `Failed to load status: ${e.message}`; });
       setInterval(render, 60000);
     </script>
   </body>
