@@ -5,77 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NauticGrid Status</title>
     <style>
-      :root { --bg:#0b1220; --card:#121b2e; --text:#d9e2f2; --muted:#8ca0c1; --ok:#10b981; --warn:#f59e0b; --bad:#ef4444; --maint:#3b82f6; }
+      @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+      :root {
+        --bg: #070b14;
+        --card: #0e1526;
+        --card-2: #121b32;
+        --text: #e6ecfb;
+        --muted: #9db0d4;
+        --line: #273758;
+        --ok: #19d38a;
+        --warn: #ffbe3b;
+        --bad: #ff5e6c;
+        --maint: #59a8ff;
+      }
       * { box-sizing: border-box; }
-      body { margin:0; font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
-      .wrap { max-width:1050px; margin:0 auto; padding:28px 16px 56px; }
-      .top { margin-bottom:18px; }
-      h1 { margin:0 0 8px; font-size:32px; }
-      h2 { margin:0 0 10px; font-size:18px; }
-      h3 { margin:0 0 6px; font-size:15px; }
-      .muted { color:var(--muted); font-size:13px; }
-      .badge { display:inline-block; margin-top:10px; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
-      .operational { background:rgba(16,185,129,.16); color:var(--ok); }
-      .degraded { background:rgba(245,158,11,.16); color:var(--warn); }
-      .down { background:rgba(239,68,68,.16); color:var(--bad); }
-      .maintenance { background:rgba(59,130,246,.16); color:var(--maint); }
-      .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
-      .card, .line { background:var(--card); border:1px solid #22314e; border-radius:12px; padding:12px; }
-      .line { margin-bottom:10px; }
-      .row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-      .dot { width:9px; height:9px; border-radius:999px; display:inline-block; margin-right:6px; }
-      .dot-operational { background:var(--ok); } .dot-degraded { background:var(--warn); } .dot-down { background:var(--bad); } .dot-maintenance { background:var(--maint); }
-      section { margin-top:18px; }
-      .pill { display:inline-block; padding:2px 8px; border:1px solid #31476f; border-radius:999px; font-size:11px; color:var(--muted); }
-      .stack { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
-      .empty { color:var(--muted); font-size:14px; }
-      a { color:#7dd3fc; text-decoration:none; }
+      body {
+        margin: 0;
+        font-family: "Sora", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1000px 460px at 100% -20%, rgba(89, 168, 255, 0.15), transparent 70%),
+          radial-gradient(800px 420px at -10% 10%, rgba(25, 211, 138, 0.08), transparent 65%),
+          var(--bg);
+      }
+      .wrap { max-width: 1140px; margin: 0 auto; padding: 24px 16px 48px; }
+      .hero {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 22px;
+        background: linear-gradient(160deg, rgba(18, 27, 50, 0.95), rgba(11, 17, 31, 0.95));
+        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      }
+      .hero-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+      .eyebrow { font-family: "IBM Plex Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--muted); }
+      h1 { margin: 8px 0 4px; font-size: 34px; line-height: 1.1; }
+      .muted { color: var(--muted); font-size: 13px; }
+      .mono { font-family: "IBM Plex Mono", monospace; }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-family: "IBM Plex Mono", monospace;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border: 1px solid transparent;
+      }
+      .status-pill {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+      }
+      .operational { background: rgba(25, 211, 138, 0.14); color: var(--ok); border-color: rgba(25, 211, 138, 0.3); }
+      .degraded { background: rgba(255, 190, 59, 0.14); color: var(--warn); border-color: rgba(255, 190, 59, 0.3); }
+      .down { background: rgba(255, 94, 108, 0.14); color: var(--bad); border-color: rgba(255, 94, 108, 0.3); }
+      .maintenance { background: rgba(89, 168, 255, 0.14); color: var(--maint); border-color: rgba(89, 168, 255, 0.3); }
+      .operational .status-pill { background: var(--ok); }
+      .degraded .status-pill { background: var(--warn); }
+      .down .status-pill { background: var(--bad); }
+      .maintenance .status-pill { background: var(--maint); }
+      .hero-stats {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+        gap: 10px;
+      }
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(14, 21, 38, 0.85);
+        padding: 10px 12px;
+      }
+      .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stat-value { margin-top: 5px; font-size: 20px; font-weight: 700; }
+      section { margin-top: 18px; }
+      .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+      h2 { margin: 0; font-size: 18px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+      .card, .line {
+        background: linear-gradient(180deg, var(--card-2), var(--card));
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+      }
+      .line { margin-bottom: 10px; }
+      .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+      .status-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; }
+      .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
+      .dot-operational { background: var(--ok); } .dot-degraded { background: var(--warn); } .dot-down { background: var(--bad); } .dot-maintenance { background: var(--maint); }
+      .pill { display: inline-block; padding: 3px 8px; border: 1px solid #3a527f; border-radius: 999px; font-size: 11px; color: var(--muted); background: rgba(18, 27, 50, 0.65); }
+      .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+      .empty { color: var(--muted); font-size: 14px; padding: 8px 2px; }
+      .footer { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 12px; }
+      a { color: #8ec5ff; text-decoration: none; }
+      @media (max-width: 860px) { .hero-stats { grid-template-columns: repeat(2, minmax(140px, 1fr)); } h1 { font-size: 30px; } }
+      @media (max-width: 560px) { .hero-stats { grid-template-columns: 1fr; } .wrap { padding: 16px 12px 36px; } h1 { font-size: 26px; } }
     </style>
   </head>
   <body>
     <main class="wrap">
-      <section class="top">
-        <h1>NauticGrid Status</h1>
-        <div id="updatedAt" class="muted">Loading status...</div>
-        <span id="overall" class="badge">Checking...</span>
+      <section class="hero">
+        <div class="hero-top">
+          <div>
+            <div class="eyebrow">NauticGrid Operations</div>
+            <h1>System Status</h1>
+            <div id="updatedAt" class="muted mono">Loading status...</div>
+          </div>
+          <span id="overall" class="badge"><span class="status-pill"></span>Checking...</span>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-label">Services</div><div id="statServices" class="stat-value">-</div></div>
+          <div class="stat"><div class="stat-label">Pipelines Healthy</div><div id="statCron" class="stat-value">-</div></div>
+          <div class="stat"><div class="stat-label">Dependencies</div><div id="statDeps" class="stat-value">-</div></div>
+          <div class="stat"><div class="stat-label">Open Incidents</div><div id="statIncidents" class="stat-value">-</div></div>
+        </div>
       </section>
 
       <section>
-        <h2>Core Services</h2>
+        <div class="section-head"><h2>Core Services</h2><span class="pill mono">Live health</span></div>
         <div id="services" class="grid"></div>
       </section>
 
       <section>
-        <h2>Cron and Data Pipelines</h2>
+        <div class="section-head"><h2>Cron and Data Pipelines</h2><span class="pill mono">Freshness + lag</span></div>
         <div id="cron"></div>
       </section>
 
       <section>
-        <h2>External Dependencies</h2>
+        <div class="section-head"><h2>External Dependencies</h2><span class="pill mono">Upstream providers</span></div>
         <div id="deps" class="grid"></div>
       </section>
 
       <section>
-        <h2>AI Provider Routing</h2>
+        <div class="section-head"><h2>AI Provider Routing</h2><span class="pill mono">Ordered failover</span></div>
         <div id="ai"></div>
       </section>
 
       <section>
-        <h2>Deployments</h2>
+        <div class="section-head"><h2>Deployments</h2><span class="pill mono">Release trace</span></div>
         <div id="deployments"></div>
       </section>
 
       <section>
-        <h2>Scheduled Maintenance</h2>
+        <div class="section-head"><h2>Scheduled Maintenance</h2><span class="pill mono">Planned events</span></div>
         <div id="maintenance"></div>
       </section>
 
       <section>
-        <h2>Incidents</h2>
+        <div class="section-head"><h2>Incidents</h2><span class="pill mono">Public timeline</span></div>
         <div id="incidents"></div>
       </section>
 
-      <p class="muted" style="margin-top:24px;">Auto-refresh every 60s · JSON endpoint: <a href="./status.json">status.json</a></p>
+      <p class="muted footer mono">Auto-refresh every 60s · JSON endpoint: <a href="./status.json">status.json</a></p>
     </main>
 
     <script>
@@ -100,25 +183,34 @@
         const res = await fetch("./status.json", { cache: "no-store" });
         const data = await res.json();
         document.getElementById("overall").className = `badge ${data.overall || "operational"}`;
-        document.getElementById("overall").textContent = label(data.overall || "operational");
+        document.getElementById("overall").innerHTML = `<span class="status-pill"></span>${label(data.overall || "operational")}`;
         document.getElementById("updatedAt").textContent = `Last updated ${fmt(data.updatedAt)} · schema v${esc(data.schemaVersion || "1")}`;
+        const services = data.services || [];
+        const cronJobs = data.cronJobs || [];
+        const deps = data.dependencies || [];
+        const incidents = data.incidents || [];
+        const openIncidents = incidents.filter((i) => i.status && i.status !== "resolved").length;
+        document.getElementById("statServices").textContent = `${services.filter((s) => s.status === "operational").length}/${services.length}`;
+        document.getElementById("statCron").textContent = `${cronJobs.filter((c) => c.status === "operational").length}/${cronJobs.length}`;
+        document.getElementById("statDeps").textContent = `${deps.filter((d) => d.status === "operational").length}/${deps.length}`;
+        document.getElementById("statIncidents").textContent = String(openIncidents);
 
-        renderCards("services", data.services, (s) => `
-          <div class="row"><strong>${esc(s.name)}</strong><span><span class="dot ${dotClass(s.status)}"></span>${label(s.status)}</span></div>
+        renderCards("services", services, (s) => `
+          <div class="row"><strong>${esc(s.name)}</strong><span class="status-chip"><span class="dot ${dotClass(s.status)}"></span>${label(s.status)}</span></div>
           <div class="muted" style="margin-top:6px;">${esc(s.description || "")}</div>
-          <div class="muted" style="margin-top:6px;">Checked ${fmt(s.lastChecked)} · SLO ${esc(s.sloTarget || "n/a")}</div>
+          <div class="muted mono" style="margin-top:6px;">Checked ${fmt(s.lastChecked)} · SLO ${esc(s.sloTarget || "n/a")}</div>
         `);
 
-        renderCards("cron", data.cronJobs, (c) => `
-          <div class="row"><strong>${esc(c.name)}</strong><span><span class="dot ${dotClass(c.status)}"></span>${label(c.status)}</span></div>
-          <div class="muted">Last success ${fmt(c.lastSuccessAt)} · Expected every ${esc(c.schedule || "n/a")}</div>
-          <div class="muted">Lag ${esc(c.currentLagMinutes ?? "n/a")} min · Alert after ${esc(c.alertAfterMinutes ?? "n/a")} min</div>
+        renderCards("cron", cronJobs, (c) => `
+          <div class="row"><strong>${esc(c.name)}</strong><span class="status-chip"><span class="dot ${dotClass(c.status)}"></span>${label(c.status)}</span></div>
+          <div class="muted mono">Last success ${fmt(c.lastSuccessAt)} · Expected every ${esc(c.schedule || "n/a")}</div>
+          <div class="muted mono">Lag ${esc(c.currentLagMinutes ?? "n/a")} min · Alert after ${esc(c.alertAfterMinutes ?? "n/a")} min</div>
           ${c.lastError ? `<div style="margin-top:6px;">Latest error: ${esc(c.lastError)}</div>` : ""}
         `);
 
-        renderCards("deps", data.dependencies, (d) => `
-          <div class="row"><strong>${esc(d.name)}</strong><span><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
-          <div class="muted">${esc(d.type || "dependency")} · Checked ${fmt(d.lastChecked)}</div>
+        renderCards("deps", deps, (d) => `
+          <div class="row"><strong>${esc(d.name)}</strong><span class="status-chip"><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
+          <div class="muted mono">${esc(d.type || "dependency")} · Checked ${fmt(d.lastChecked)}</div>
           ${d.note ? `<div class="muted" style="margin-top:6px;">${esc(d.note)}</div>` : ""}
         `);
 
@@ -132,8 +224,8 @@
         `);
 
         renderCards("deployments", data.deployments, (d) => `
-          <div class="row"><strong>${esc(d.service)}</strong><span><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
-          <div class="muted">Commit ${esc(d.commitSha || "n/a")} · ${esc(d.environment || "prod")} · Deployed ${fmt(d.deployedAt)}</div>
+          <div class="row"><strong>${esc(d.service)}</strong><span class="status-chip"><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
+          <div class="muted mono">Commit ${esc(d.commitSha || "n/a")} · ${esc(d.environment || "prod")} · Deployed ${fmt(d.deployedAt)}</div>
           ${d.buildUrl ? `<div class="muted"><a href="${esc(d.buildUrl)}" target="_blank" rel="noreferrer">Build logs</a></div>` : ""}
         `);
 
