@@ -316,6 +316,10 @@
             <div id="dataQuality"></div>
           </section>
           <section class="section">
+            <div class="section-head"><h2>User Experience Health</h2><span class="pill mono">Product reliability</span></div>
+            <div id="userHealth"></div>
+          </section>
+          <section class="section">
             <div class="section-head"><h2>Incidents</h2><span class="pill mono">Public timeline</span></div>
             <div id="incidents"></div>
           </section>
@@ -503,6 +507,19 @@
             <div class="row"><strong>${esc(m.name)}</strong><span class="pill mono">${esc(m.value)}%</span></div>
             ${renderMeter("Score", Number(m.value || 0))}
             <div class="muted mono" style="margin-top:6px;">Target ${esc(m.target || "n/a")}%</div>
+          </div>
+        `);
+
+        const userHealth = data.userHealth ? [data.userHealth] : [];
+        renderCards("userHealth", userHealth, (u) => `
+          <div class="metric-box">
+            <div class="row"><strong>User status</strong><span class="pill mono">${esc(u.status || "operational")}</span></div>
+            ${renderMeter("Login success", Number(u.loginSuccessPct || 0))}
+            ${renderMeter("Signup conversion", Number(u.signupConversionPct || 0))}
+            ${renderMeter("Session validity", Number(u.sessionValidityPct || 0))}
+            ${renderMeter("Page speed score", Number(u.pageSpeedScore || 0))}
+            ${renderMeter("API reliability", Number(u.apiReliabilityPct || 0))}
+            <div class="muted mono" style="margin-top:8px;">p95 page load ${esc(u.pageLoadP95Ms || "n/a")}ms · API error rate ${esc(u.apiErrorRatePct || "n/a")}%</div>
           </div>
         `);
 

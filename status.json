@@ -131,6 +131,16 @@
     { "name": "Port coverage", "value": 98, "target": 97 },
     { "name": "AI output success", "value": 93, "target": 90 }
   ],
+  "userHealth": {
+    "status": "operational",
+    "loginSuccessPct": 98,
+    "signupConversionPct": 76,
+    "sessionValidityPct": 99,
+    "pageSpeedScore": 91,
+    "apiReliabilityPct": 97,
+    "pageLoadP95Ms": 940,
+    "apiErrorRatePct": 0.7
+  },
   "regionalImpact": [
     { "region": "Asia Pacific", "status": "degraded", "portsAffected": 3, "lanesAffected": 2, "disruptionIndex": 64 },
     { "region": "Europe", "status": "operational", "portsAffected": 1, "lanesAffected": 1, "disruptionIndex": 38 },

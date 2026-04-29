@@ -13,6 +13,15 @@
     "portCoverage": 98,
     "aiOutputSuccess": 93
   },
+  "userHealth": {
+    "loginSuccessPct": 98,
+    "signupConversionPct": 76,
+    "sessionValidityPct": 99,
+    "pageSpeedScore": 91,
+    "apiReliabilityPct": 97,
+    "pageLoadP95Ms": 940,
+    "apiErrorRatePct": 0.7
+  },
   "aiProviders": [
     { "id": "groq", "requestSharePct": 62, "avgLatencyMs": 460, "failoverCount24h": 1 },
     { "id": "openrouter", "requestSharePct": 26, "avgLatencyMs": 710, "failoverCount24h": 2 },
