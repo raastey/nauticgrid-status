@@ -5,42 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NauticGrid Status</title>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
       :root {
-        --bg: #070b14;
-        --card: #0e1526;
-        --card-2: #121b32;
-        --text: #e6ecfb;
-        --muted: #9db0d4;
-        --line: #273758;
-        --ok: #19d38a;
-        --warn: #ffbe3b;
-        --bad: #ff5e6c;
-        --maint: #59a8ff;
+        --ng-base: #0a1120;
+        --ng-surface: #10192a;
+        --ng-elevated: #172236;
+        --ng-border: #24344f;
+        --ng-text-primary: #e6eefa;
+        --ng-text-secondary: #94a5c0;
+        --ng-text-muted: #6f859f;
+        --ng-accent: #38bdf8;
+        --ng-normal: #34d399;
+        --ng-watch: #fbbf24;
+        --ng-critical: #f87171;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
-        font-family: "Sora", sans-serif;
-        color: var(--text);
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        color: var(--ng-text-primary);
         background:
-          radial-gradient(1000px 460px at 100% -20%, rgba(89, 168, 255, 0.15), transparent 70%),
-          radial-gradient(800px 420px at -10% 10%, rgba(25, 211, 138, 0.08), transparent 65%),
-          var(--bg);
+          radial-gradient(900px 420px at 110% -30%, rgba(56, 189, 248, 0.13), transparent 70%),
+          radial-gradient(700px 380px at -15% 8%, rgba(52, 211, 153, 0.08), transparent 65%),
+          var(--ng-base);
       }
       .wrap { max-width: 1140px; margin: 0 auto; padding: 24px 16px 48px; }
+      .nav {
+        background: rgba(16, 25, 42, 0.94);
+        border-bottom: 1px solid var(--ng-border);
+        backdrop-filter: blur(6px);
+      }
+      .nav-inner {
+        max-width: 1140px;
+        margin: 0 auto;
+        height: 56px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .beta {
+        font-size: 10px;
+        color: var(--ng-accent);
+        border: 1px solid rgb(56 189 248 / 0.35);
+        border-radius: 999px;
+        padding: 2px 6px;
+        font-weight: 600;
+      }
       .hero {
-        border: 1px solid var(--line);
+        border: 1px solid var(--ng-border);
         border-radius: 18px;
         padding: 22px;
-        background: linear-gradient(160deg, rgba(18, 27, 50, 0.95), rgba(11, 17, 31, 0.95));
+        background: linear-gradient(160deg, rgba(16, 25, 42, 0.96), rgba(12, 19, 32, 0.96));
         box-shadow: 0 20px 40px rgba(0,0,0,0.25);
       }
       .hero-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
-      .eyebrow { font-family: "IBM Plex Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--muted); }
+      .eyebrow { font-family: "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--ng-text-muted); }
       h1 { margin: 8px 0 4px; font-size: 34px; line-height: 1.1; }
-      .muted { color: var(--muted); font-size: 13px; }
-      .mono { font-family: "IBM Plex Mono", monospace; }
+      .muted { color: var(--ng-text-secondary); font-size: 13px; }
+      .mono { font-family: "JetBrains Mono", monospace; }
       .badge {
         display: inline-flex;
         align-items: center;
@@ -48,7 +78,7 @@
         padding: 7px 12px;
         border-radius: 999px;
         font-size: 11px;
-        font-family: "IBM Plex Mono", monospace;
+        font-family: "JetBrains Mono", monospace;
         letter-spacing: 0.05em;
         text-transform: uppercase;
         border: 1px solid transparent;
@@ -58,14 +88,14 @@
         height: 8px;
         border-radius: 999px;
       }
-      .operational { background: rgba(25, 211, 138, 0.14); color: var(--ok); border-color: rgba(25, 211, 138, 0.3); }
-      .degraded { background: rgba(255, 190, 59, 0.14); color: var(--warn); border-color: rgba(255, 190, 59, 0.3); }
-      .down { background: rgba(255, 94, 108, 0.14); color: var(--bad); border-color: rgba(255, 94, 108, 0.3); }
-      .maintenance { background: rgba(89, 168, 255, 0.14); color: var(--maint); border-color: rgba(89, 168, 255, 0.3); }
-      .operational .status-pill { background: var(--ok); }
-      .degraded .status-pill { background: var(--warn); }
-      .down .status-pill { background: var(--bad); }
-      .maintenance .status-pill { background: var(--maint); }
+      .operational { background: rgb(52 211 153 / 0.14); color: var(--ng-normal); border-color: rgb(52 211 153 / 0.3); }
+      .degraded { background: rgb(251 191 36 / 0.14); color: var(--ng-watch); border-color: rgb(251 191 36 / 0.3); }
+      .down { background: rgb(248 113 113 / 0.14); color: var(--ng-critical); border-color: rgb(248 113 113 / 0.3); }
+      .maintenance { background: rgb(56 189 248 / 0.14); color: var(--ng-accent); border-color: rgb(56 189 248 / 0.3); }
+      .operational .status-pill { background: var(--ng-normal); }
+      .degraded .status-pill { background: var(--ng-watch); }
+      .down .status-pill { background: var(--ng-critical); }
+      .maintenance .status-pill { background: var(--ng-accent); }
       .hero-stats {
         margin-top: 16px;
         display: grid;
@@ -73,20 +103,20 @@
         gap: 10px;
       }
       .stat {
-        border: 1px solid var(--line);
+        border: 1px solid var(--ng-border);
         border-radius: 12px;
         background: rgba(14, 21, 38, 0.85);
         padding: 10px 12px;
       }
-      .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+      .stat-label { font-size: 11px; color: var(--ng-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
       .stat-value { margin-top: 5px; font-size: 20px; font-weight: 700; }
       section { margin-top: 18px; }
       .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
       h2 { margin: 0; font-size: 18px; }
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
       .card, .line {
-        background: linear-gradient(180deg, var(--card-2), var(--card));
-        border: 1px solid var(--line);
+        background: linear-gradient(180deg, var(--ng-elevated), var(--ng-surface));
+        border: 1px solid var(--ng-border);
         border-radius: 14px;
         padding: 12px;
       }
@@ -94,17 +124,26 @@
       .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
       .status-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; }
       .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
-      .dot-operational { background: var(--ok); } .dot-degraded { background: var(--warn); } .dot-down { background: var(--bad); } .dot-maintenance { background: var(--maint); }
-      .pill { display: inline-block; padding: 3px 8px; border: 1px solid #3a527f; border-radius: 999px; font-size: 11px; color: var(--muted); background: rgba(18, 27, 50, 0.65); }
+      .dot-operational { background: var(--ng-normal); } .dot-degraded { background: var(--ng-watch); } .dot-down { background: var(--ng-critical); } .dot-maintenance { background: var(--ng-accent); }
+      .pill { display: inline-block; padding: 3px 8px; border: 1px solid #3a527f; border-radius: 999px; font-size: 11px; color: var(--ng-text-secondary); background: rgba(18, 27, 50, 0.65); }
       .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
-      .empty { color: var(--muted); font-size: 14px; padding: 8px 2px; }
-      .footer { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 12px; }
+      .empty { color: var(--ng-text-secondary); font-size: 14px; padding: 8px 2px; }
+      .footer { margin-top: 24px; border-top: 1px solid var(--ng-border); padding-top: 12px; }
       a { color: #8ec5ff; text-decoration: none; }
       @media (max-width: 860px) { .hero-stats { grid-template-columns: repeat(2, minmax(140px, 1fr)); } h1 { font-size: 30px; } }
       @media (max-width: 560px) { .hero-stats { grid-template-columns: 1fr; } .wrap { padding: 16px 12px 36px; } h1 { font-size: 26px; } }
     </style>
   </head>
   <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <span>NauticGrid</span>
+          <span class="beta">STATUS</span>
+        </div>
+        <a class="muted mono" href="https://www.nauticgrid.xyz" target="_blank" rel="noreferrer">Back to app</a>
+      </div>
+    </header>
     <main class="wrap">
       <section class="hero">
         <div class="hero-top">
