@@ -1,0 +1,22 @@
+{
+  "updatedAt": "2026-04-29T02:20:00Z",
+  "slo": {
+    "target": 99.9,
+    "uptime24h": 99.97,
+    "uptime7d": 99.89,
+    "uptime30d": 99.84,
+    "latencySlo24h": 99.2
+  },
+  "dataQuality": {
+    "feedCompleteness": 96,
+    "marketFreshness": 82,
+    "portCoverage": 98,
+    "aiOutputSuccess": 93
+  },
+  "aiProviders": [
+    { "id": "groq", "requestSharePct": 62, "avgLatencyMs": 460, "failoverCount24h": 1 },
+    { "id": "openrouter", "requestSharePct": 26, "avgLatencyMs": 710, "failoverCount24h": 2 },
+    { "id": "deepseek", "requestSharePct": 9, "avgLatencyMs": 690, "failoverCount24h": 0 },
+    { "id": "cerebras", "requestSharePct": 3, "avgLatencyMs": 380, "failoverCount24h": 0 }
+  ]
+}

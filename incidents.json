@@ -1,0 +1,15 @@
+{
+  "updatedAt": "2026-04-29T02:20:00Z",
+  "active": [],
+  "history": [
+    {
+      "id": "inc_20260428_market_lag",
+      "title": "Market updater lag",
+      "severity": "minor",
+      "status": "resolved",
+      "createdAt": "2026-04-28T20:00:00Z",
+      "resolvedAt": "2026-04-28T22:10:00Z",
+      "latestUpdate": "Upstream stabilized; backlog cleared."
+    }
+  ]
+}

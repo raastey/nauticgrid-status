@@ -1,0 +1,10 @@
+{
+  "updatedAt": "2026-04-29T02:20:00Z",
+  "overall": "operational",
+  "systemScore": 91,
+  "servicesHealthy": "3/3",
+  "pipelinesHealthy": "2/3",
+  "dependenciesHealthy": "1/3",
+  "openIncidents": 0,
+  "activeProvider": "groq"
+}

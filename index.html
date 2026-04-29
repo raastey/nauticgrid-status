@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NauticGrid Status</title>
+    <title>NauticGrid Status Command Center</title>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
       :root {
@@ -159,6 +159,71 @@
         font-size: 12px;
         color: var(--ng-text-secondary);
       }
+      .banner {
+        display:none;
+        margin: 12px 0;
+        border: 1px solid rgb(220 38 38 / 0.25);
+        background: rgb(220 38 38 / 0.07);
+        color: var(--ng-text-primary);
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+      .timeline {
+        border: 1px solid var(--ng-border);
+        border-radius: 12px;
+        background: var(--ng-surface);
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      .timeline-track {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 10px;
+      }
+      .timeline-item {
+        border: 1px solid var(--ng-border);
+        background: var(--ng-elevated);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .kpi-grid {
+        display:grid;
+        grid-template-columns: repeat(3, minmax(150px, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .mini {
+        border: 1px solid var(--ng-border);
+        background: var(--ng-elevated);
+        border-radius: 10px;
+        padding: 8px;
+      }
+      .mini .label { font-size: 10px; color: var(--ng-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+      .mini .value { font-size: 15px; font-weight: 600; margin-top: 3px; }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      .table th, .table td {
+        text-align: left;
+        border-bottom: 1px solid var(--ng-border);
+        padding: 8px 6px;
+      }
+      .table th { color: var(--ng-text-muted); font-weight: 600; font-size: 11px; }
+      .metric-box {
+        border:1px solid var(--ng-border);
+        border-radius:10px;
+        background: var(--ng-elevated);
+        padding: 10px;
+      }
+      .link-row { display:flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+      .btn-link {
+        display:inline-flex; align-items:center; gap:6px;
+        border:1px solid var(--ng-border); border-radius:999px;
+        background: var(--ng-surface); color: var(--ng-text-secondary);
+        padding: 5px 10px; font-size: 12px;
+      }
       .meter { margin-top: 8px; }
       .meter-head { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--ng-text-muted); margin-bottom:4px; }
       .meter-track {
@@ -176,6 +241,7 @@
       .fill-blue { background: var(--ng-accent); }
       @media (max-width: 980px) {
         .overview, .layout { grid-template-columns: 1fr; }
+        .kpi-grid { grid-template-columns: 1fr; }
       }
       @media (max-width: 560px) {
         .wrap { padding: 16px 12px 36px; }
@@ -202,6 +268,13 @@
       </div>
     </div>
     <main class="wrap">
+      <div id="activeIncident" class="banner"></div>
+
+      <section class="timeline">
+        <div class="section-head"><h2>Live Timeline</h2><span class="pill mono">Newest first</span></div>
+        <div id="timeline" class="timeline-track"></div>
+      </section>
+
       <section class="overview">
         <div class="hero-main">
           <div>
@@ -209,6 +282,7 @@
             <h1>System Status</h1>
             <div id="updatedAt" class="muted mono">Loading status...</div>
             <div class="callout">Status reflects web, worker, data pipelines, external providers, and deployment health.</div>
+            <div id="errorBudgetCallout" class="callout mono" style="margin-top:8px;"></div>
           </div>
         </div>
         <div class="hero-side">
@@ -234,11 +308,23 @@
             <div id="cron"></div>
           </section>
           <section class="section">
+            <div class="section-head"><h2>SLO and Uptime</h2><span class="pill mono">24h / 7d / 30d</span></div>
+            <div id="slo"></div>
+          </section>
+          <section class="section">
+            <div class="section-head"><h2>Data Quality Center</h2><span class="pill mono">Completeness + staleness</span></div>
+            <div id="dataQuality"></div>
+          </section>
+          <section class="section">
             <div class="section-head"><h2>Incidents</h2><span class="pill mono">Public timeline</span></div>
             <div id="incidents"></div>
           </section>
         </div>
         <div>
+          <section class="section">
+            <div class="section-head"><h2>Regional Impact Map</h2><span class="pill mono">Operational surface</span></div>
+            <div id="regional"></div>
+          </section>
           <section class="section">
             <div class="section-head"><h2>External Dependencies</h2><span class="pill mono">Upstream providers</span></div>
             <div id="deps"></div>
@@ -252,13 +338,25 @@
             <div id="deployments"></div>
           </section>
           <section class="section">
+            <div class="section-head"><h2>Deploy Confidence</h2><span class="pill mono">Risk post-release</span></div>
+            <div id="deployConfidence"></div>
+          </section>
+          <section class="section">
             <div class="section-head"><h2>Scheduled Maintenance</h2><span class="pill mono">Planned events</span></div>
             <div id="maintenance"></div>
+          </section>
+          <section class="section">
+            <div class="section-head"><h2>Subscribe and Integrate</h2><span class="pill mono">Comms</span></div>
+            <div id="subscribe"></div>
+          </section>
+          <section class="section">
+            <div class="section-head"><h2>Transparency and Postmortems</h2><span class="pill mono">Trust center</span></div>
+            <div id="transparency"></div>
           </section>
         </div>
       </div>
 
-      <p class="muted footer mono">Auto-refresh every 60s · JSON endpoint: <a href="./status.json">status.json</a></p>
+      <p class="muted footer mono">Auto-refresh every 60s · JSON endpoints: <a href="./status.json">status.json</a> · <a href="./summary.json">summary.json</a> · <a href="./incidents.json">incidents.json</a> · <a href="./metrics.json">metrics.json</a></p>
     </main>
 
     <script>
@@ -294,6 +392,9 @@
         if (lag <= 0) return 100;
         return clamp(100 - (lag / alertAfter) * 100);
       }
+      function renderMini(label, value) {
+        return `<div class="mini"><div class="label">${esc(label)}</div><div class="value">${esc(value)}</div></div>`;
+      }
 
       function renderCards(targetId, rows, rowBuilder) {
         const el = document.getElementById(targetId);
@@ -317,6 +418,7 @@
         const cronJobs = data.cronJobs || [];
         const deps = data.dependencies || [];
         const incidents = data.incidents || [];
+        const timeline = data.timeline || [];
         const openIncidents = incidents.filter((i) => i.status && i.status !== "resolved").length;
         document.getElementById("statServices").textContent = `${services.filter((s) => s.status === "operational").length}/${services.length}`;
         document.getElementById("statCron").textContent = `${cronJobs.filter((c) => c.status === "operational").length}/${cronJobs.length}`;
@@ -328,6 +430,26 @@
         const incidentPenalty = Math.min(40, openIncidents * 10);
         const systemScore = clamp((serviceAvg * 0.45) + (cronAvg * 0.3) + (depAvg * 0.25) - incidentPenalty);
         document.getElementById("systemScore").innerHTML = renderMeter("System score", systemScore);
+        const burn = clamp(Number(data.slo?.errorBudgetBurnPct ?? 0));
+        document.getElementById("errorBudgetCallout").innerHTML = `Error budget burn this month: <strong>${burn}%</strong> · SLO target <strong>${esc(data.slo?.target ?? "99.9%")}</strong>`;
+
+        const active = incidents.find((i) => i.status && i.status !== "resolved");
+        const banner = document.getElementById("activeIncident");
+        if (active) {
+          banner.style.display = "block";
+          banner.innerHTML = `<strong>Active incident:</strong> ${esc(active.title)} · ${esc(active.latestUpdate || "Investigating")} · next update ${esc(active.nextUpdateEta || "TBD")}`;
+        } else {
+          banner.style.display = "none";
+          banner.innerHTML = "";
+        }
+
+        renderCards("timeline", timeline, (t) => `
+          <div class="timeline-item">
+            <div class="row"><strong>${esc(t.title)}</strong><span class="status-chip"><span class="dot ${dotClass(t.status || "operational")}"></span>${label(t.status || "operational")}</span></div>
+            <div class="muted mono">${fmt(t.time)}</div>
+            <div style="margin-top:6px;">${esc(t.detail || "")}</div>
+          </div>
+        `);
 
         renderCards("services", services, (s) => `
           <div class="row"><strong>${esc(s.name)}</strong><span class="status-chip"><span class="dot ${dotClass(s.status)}"></span>${label(s.status)}</span></div>
@@ -366,6 +488,36 @@
           }
         `);
 
+        const slos = data.slo?.windows || [];
+        renderCards("slo", slos, (w) => `
+          <div class="metric-box">
+            <div class="row"><strong>${esc(w.label)}</strong><span class="pill mono">${esc(w.uptimePct)} uptime</span></div>
+            ${renderMeter("Uptime", Number(w.uptimePct || 0))}
+            ${renderMeter("Latency SLO", Number(w.latencySloPct || 0))}
+          </div>
+        `);
+
+        const dq = data.dataQuality || [];
+        renderCards("dataQuality", dq, (m) => `
+          <div class="metric-box">
+            <div class="row"><strong>${esc(m.name)}</strong><span class="pill mono">${esc(m.value)}%</span></div>
+            ${renderMeter("Score", Number(m.value || 0))}
+            <div class="muted mono" style="margin-top:6px;">Target ${esc(m.target || "n/a")}%</div>
+          </div>
+        `);
+
+        const regional = data.regionalImpact || [];
+        renderCards("regional", regional, (r) => `
+          <div class="line">
+            <div class="row"><strong>${esc(r.region)}</strong><span class="status-chip"><span class="dot ${dotClass(r.status || "operational")}"></span>${label(r.status || "operational")}</span></div>
+            <div class="kpi-grid">
+              ${renderMini("Ports affected", r.portsAffected ?? 0)}
+              ${renderMini("Lanes affected", r.lanesAffected ?? 0)}
+              ${renderMini("Disruption idx", r.disruptionIndex ?? 0)}
+            </div>
+          </div>
+        `);
+
         renderCards("deployments", data.deployments, (d) => `
           <div class="row"><strong>${esc(d.service)}</strong><span class="status-chip"><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
           <div class="muted mono">Commit ${esc(d.commitSha || "n/a")} · ${esc(d.environment || "prod")} · Deployed ${fmt(d.deployedAt)}</div>
@@ -381,6 +533,41 @@
           <div class="row"><strong>${esc(i.title)}</strong><span><span class="dot ${dotClass(i.status)}"></span>${label(i.status)}</span></div>
           <div class="muted">${esc(i.severity || "minor")} · Started ${fmt(i.createdAt)}${i.resolvedAt ? ` · Resolved ${fmt(i.resolvedAt)}` : ""}</div>
           <div style="margin-top:6px;">${esc(i.latestUpdate || "No details")}</div>
+        `);
+
+        const confidence = data.deployConfidence ? [data.deployConfidence] : [];
+        renderCards("deployConfidence", confidence, (d) => `
+          <div class="metric-box">
+            <div class="row"><strong>Current release confidence</strong><span class="pill mono">${esc(d.state || "safe")}</span></div>
+            ${renderMeter("Confidence", Number(d.score || 100))}
+            <div class="muted mono" style="margin-top:6px;">Error delta ${esc(d.errorDeltaPct || 0)}% · Rollback ready: ${d.rollbackReady ? "yes" : "no"}</div>
+          </div>
+        `);
+
+        const subscribe = data.subscribe ? [data.subscribe] : [];
+        renderCards("subscribe", subscribe, (s) => `
+          <div class="line">
+            <div class="muted">Get notified when status changes or incidents are posted.</div>
+            <div class="link-row">
+              <a class="btn-link" href="${esc(s.email || "mailto:status@nauticgrid.xyz")}">Email alerts</a>
+              <a class="btn-link" href="${esc(s.rss || "./feed.xml")}">RSS feed</a>
+              <a class="btn-link" href="${esc(s.webhookDoc || "#")}">Webhook API</a>
+            </div>
+          </div>
+        `);
+
+        const transparency = data.transparency ? [data.transparency] : [];
+        renderCards("transparency", transparency, (t) => `
+          <div class="line">
+            <div class="kpi-grid">
+              ${renderMini("MTTD", t.mttd ?? "n/a")}
+              ${renderMini("MTTR", t.mttr ?? "n/a")}
+              ${renderMini("Postmortems", t.postmortemsPublished ?? 0)}
+            </div>
+            <div class="link-row" style="margin-top:10px;">
+              ${(t.postmortemLinks || []).map((p) => `<a class="btn-link" href="${esc(p.url)}" target="_blank" rel="noreferrer">${esc(p.title)}</a>`).join("")}
+            </div>
+          </div>
         `);
       }
 

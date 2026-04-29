@@ -2,6 +2,26 @@
   "schemaVersion": "2.0.0",
   "updatedAt": "2026-04-29T01:05:00Z",
   "overall": "operational",
+  "timeline": [
+    {
+      "time": "2026-04-29T02:10:00Z",
+      "title": "Status command center deployed",
+      "status": "operational",
+      "detail": "UI v2 released with bars and advanced telemetry."
+    },
+    {
+      "time": "2026-04-29T01:34:00Z",
+      "title": "AI failover active",
+      "status": "operational",
+      "detail": "Provider chain healthy in configured order."
+    },
+    {
+      "time": "2026-04-29T00:40:00Z",
+      "title": "Market updater lag",
+      "status": "degraded",
+      "detail": "Upstream finance API intermittent timeouts."
+    }
+  ],
   "services": [
     {
       "id": "web",
@@ -90,12 +110,33 @@
     "order": ["groq", "openrouter", "deepseek", "cerebras"],
     "activeProvider": "groq",
     "providers": [
-      { "id": "groq", "configured": true, "pausedUntil": null },
-      { "id": "openrouter", "configured": true, "pausedUntil": null },
-      { "id": "deepseek", "configured": true, "pausedUntil": null },
-      { "id": "cerebras", "configured": true, "pausedUntil": null }
+      { "id": "groq", "configured": true, "pausedUntil": null, "requestSharePct": 62, "avgLatencyMs": 460, "failoverCount24h": 1 },
+      { "id": "openrouter", "configured": true, "pausedUntil": null, "requestSharePct": 26, "avgLatencyMs": 710, "failoverCount24h": 2 },
+      { "id": "deepseek", "configured": true, "pausedUntil": null, "requestSharePct": 9, "avgLatencyMs": 690, "failoverCount24h": 0 },
+      { "id": "cerebras", "configured": true, "pausedUntil": null, "requestSharePct": 3, "avgLatencyMs": 380, "failoverCount24h": 0 }
     ]
   },
+  "slo": {
+    "target": "99.9%",
+    "errorBudgetBurnPct": 18,
+    "windows": [
+      { "label": "24h", "uptimePct": 99.97, "latencySloPct": 99.2 },
+      { "label": "7d", "uptimePct": 99.89, "latencySloPct": 98.6 },
+      { "label": "30d", "uptimePct": 99.84, "latencySloPct": 97.9 }
+    ]
+  },
+  "dataQuality": [
+    { "name": "Feed completeness", "value": 96, "target": 95 },
+    { "name": "Market freshness", "value": 82, "target": 95 },
+    { "name": "Port coverage", "value": 98, "target": 97 },
+    { "name": "AI output success", "value": 93, "target": 90 }
+  ],
+  "regionalImpact": [
+    { "region": "Asia Pacific", "status": "degraded", "portsAffected": 3, "lanesAffected": 2, "disruptionIndex": 64 },
+    { "region": "Europe", "status": "operational", "portsAffected": 1, "lanesAffected": 1, "disruptionIndex": 38 },
+    { "region": "Middle East", "status": "degraded", "portsAffected": 2, "lanesAffected": 2, "disruptionIndex": 58 },
+    { "region": "Americas", "status": "operational", "portsAffected": 1, "lanesAffected": 0, "disruptionIndex": 35 }
+  ],
   "deployments": [
     {
       "service": "nauticgrid",
@@ -115,5 +156,25 @@
     }
   ],
   "maintenance": [],
-  "incidents": []
+  "incidents": [],
+  "deployConfidence": {
+    "state": "safe",
+    "score": 92,
+    "errorDeltaPct": 4,
+    "rollbackReady": true
+  },
+  "subscribe": {
+    "email": "mailto:status@nauticgrid.xyz?subject=Status%20Alerts",
+    "rss": "./feed.xml",
+    "webhookDoc": "https://github.com/raastey/nauticgrid-status"
+  },
+  "transparency": {
+    "mttd": "11m",
+    "mttr": "54m",
+    "postmortemsPublished": 3,
+    "postmortemLinks": [
+      { "title": "Market feed lag RCA", "url": "https://github.com/raastey/nauticgrid-status/issues/1" },
+      { "title": "Worker build failure RCA", "url": "https://github.com/raastey/nauticgrid-status/issues/2" }
+    ]
+  }
 }
