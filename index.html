@@ -7,36 +7,29 @@
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
       :root {
-        --ng-base: #0a1120;
-        --ng-surface: #10192a;
-        --ng-elevated: #172236;
-        --ng-border: #24344f;
-        --ng-text-primary: #e6eefa;
-        --ng-text-secondary: #94a5c0;
-        --ng-text-muted: #6f859f;
-        --ng-accent: #38bdf8;
-        --ng-normal: #34d399;
-        --ng-watch: #fbbf24;
-        --ng-critical: #f87171;
+        --ng-base: #fafbfd;
+        --ng-surface: #ffffff;
+        --ng-elevated: #f1f5f9;
+        --ng-border: #e2e8f0;
+        --ng-text-primary: #0f172a;
+        --ng-text-secondary: #475569;
+        --ng-text-muted: #94a3b8;
+        --ng-accent: #0284c7;
+        --ng-normal: #16a34a;
+        --ng-watch: #d97706;
+        --ng-critical: #dc2626;
       }
       * { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: "Inter", system-ui, -apple-system, sans-serif;
         color: var(--ng-text-primary);
-        background:
-          radial-gradient(900px 420px at 110% -30%, rgba(56, 189, 248, 0.13), transparent 70%),
-          radial-gradient(700px 380px at -15% 8%, rgba(52, 211, 153, 0.08), transparent 65%),
-          var(--ng-base);
+        background: var(--ng-base);
       }
       .wrap { max-width: 1140px; margin: 0 auto; padding: 24px 16px 48px; }
-      .nav {
-        background: rgba(16, 25, 42, 0.94);
-        border-bottom: 1px solid var(--ng-border);
-        backdrop-filter: blur(6px);
-      }
+      .nav { background: rgb(255 255 255 / 95%); border-bottom: 1px solid var(--ng-border); backdrop-filter: blur(4px); }
       .nav-inner {
-        max-width: 1140px;
+        max-width: 1200px;
         margin: 0 auto;
         height: 56px;
         padding: 0 16px;
@@ -44,27 +37,22 @@
         align-items: center;
         justify-content: space-between;
       }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-      }
+      .brand { display:flex; align-items:center; gap:8px; font-weight:700; letter-spacing:-0.01em; color: var(--ng-text-primary); }
       .beta {
         font-size: 10px;
-        color: var(--ng-accent);
-        border: 1px solid rgb(56 189 248 / 0.35);
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+        background: #f0f9ff;
         border-radius: 999px;
         padding: 2px 6px;
         font-weight: 600;
       }
       .hero {
         border: 1px solid var(--ng-border);
-        border-radius: 18px;
-        padding: 22px;
-        background: linear-gradient(160deg, rgba(16, 25, 42, 0.96), rgba(12, 19, 32, 0.96));
-        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        border-radius: 12px;
+        padding: 20px;
+        background: var(--ng-surface);
+        box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
       }
       .hero-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
       .eyebrow { font-family: "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--ng-text-muted); }
@@ -88,10 +76,10 @@
         height: 8px;
         border-radius: 999px;
       }
-      .operational { background: rgb(52 211 153 / 0.14); color: var(--ng-normal); border-color: rgb(52 211 153 / 0.3); }
-      .degraded { background: rgb(251 191 36 / 0.14); color: var(--ng-watch); border-color: rgb(251 191 36 / 0.3); }
-      .down { background: rgb(248 113 113 / 0.14); color: var(--ng-critical); border-color: rgb(248 113 113 / 0.3); }
-      .maintenance { background: rgb(56 189 248 / 0.14); color: var(--ng-accent); border-color: rgb(56 189 248 / 0.3); }
+      .operational { background: rgb(22 163 74 / 0.1); color: var(--ng-normal); border-color: rgb(22 163 74 / 0.22); }
+      .degraded { background: rgb(217 119 6 / 0.1); color: var(--ng-watch); border-color: rgb(217 119 6 / 0.22); }
+      .down { background: rgb(220 38 38 / 0.1); color: var(--ng-critical); border-color: rgb(220 38 38 / 0.22); }
+      .maintenance { background: rgb(2 132 199 / 0.1); color: var(--ng-accent); border-color: rgb(2 132 199 / 0.22); }
       .operational .status-pill { background: var(--ng-normal); }
       .degraded .status-pill { background: var(--ng-watch); }
       .down .status-pill { background: var(--ng-critical); }
@@ -105,7 +93,7 @@
       .stat {
         border: 1px solid var(--ng-border);
         border-radius: 12px;
-        background: rgba(14, 21, 38, 0.85);
+        background: var(--ng-elevated);
         padding: 10px 12px;
       }
       .stat-label { font-size: 11px; color: var(--ng-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
@@ -115,7 +103,7 @@
       h2 { margin: 0; font-size: 18px; }
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
       .card, .line {
-        background: linear-gradient(180deg, var(--ng-elevated), var(--ng-surface));
+        background: var(--ng-surface);
         border: 1px solid var(--ng-border);
         border-radius: 14px;
         padding: 12px;
@@ -125,11 +113,11 @@
       .status-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; }
       .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
       .dot-operational { background: var(--ng-normal); } .dot-degraded { background: var(--ng-watch); } .dot-down { background: var(--ng-critical); } .dot-maintenance { background: var(--ng-accent); }
-      .pill { display: inline-block; padding: 3px 8px; border: 1px solid #3a527f; border-radius: 999px; font-size: 11px; color: var(--ng-text-secondary); background: rgba(18, 27, 50, 0.65); }
+      .pill { display: inline-block; padding: 3px 8px; border: 1px solid var(--ng-border); border-radius: 999px; font-size: 11px; color: var(--ng-text-secondary); background: var(--ng-elevated); }
       .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
       .empty { color: var(--ng-text-secondary); font-size: 14px; padding: 8px 2px; }
       .footer { margin-top: 24px; border-top: 1px solid var(--ng-border); padding-top: 12px; }
-      a { color: #8ec5ff; text-decoration: none; }
+      a { color: var(--ng-accent); text-decoration: none; }
       @media (max-width: 860px) { .hero-stats { grid-template-columns: repeat(2, minmax(140px, 1fr)); } h1 { font-size: 30px; } }
       @media (max-width: 560px) { .hero-stats { grid-template-columns: 1fr; } .wrap { padding: 16px 12px 36px; } h1 { font-size: 26px; } }
     </style>
