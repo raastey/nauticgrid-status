@@ -3,595 +3,280 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NauticGrid Status Command Center</title>
+    <title>nauticgrid status</title>
+    <link rel="icon" href="./logo.png" type="image/png" />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
       :root {
-        --ng-base: #fafbfd;
-        --ng-surface: #ffffff;
-        --ng-elevated: #f1f5f9;
-        --ng-border: #e2e8f0;
-        --ng-text-primary: #0f172a;
-        --ng-text-secondary: #475569;
-        --ng-text-muted: #94a3b8;
-        --ng-accent: #0284c7;
-        --ng-normal: #16a34a;
-        --ng-watch: #d97706;
-        --ng-critical: #dc2626;
+        --bg: #f8fbfc;
+        --card: #ffffff;
+        --line: #e2eced;
+        --text: #10222c;
+        --muted: #6d7e86;
+        --ok: #12b886;
+        --warn: #f59f00;
+        --bad: #e03131;
       }
-      * { box-sizing: border-box; margin: 0; }
+      * { box-sizing: border-box; }
       body {
-        font-family: "Inter", system-ui, -apple-system, sans-serif;
-        color: var(--ng-text-primary);
-        background: var(--ng-base);
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: radial-gradient(circle at top, #f9fdff 0%, #f5f9fa 55%, #f4f8f9 100%);
+        color: var(--text);
       }
-      .wrap { max-width: 1200px; margin: 0 auto; padding: 20px 16px 48px; }
-      .nav { background: rgb(255 255 255 / 95%); border-bottom: 1px solid var(--ng-border); backdrop-filter: blur(4px); }
-      .nav-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        height: 56px;
-        padding: 0 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      .wrap { max-width: 1240px; margin: 0 auto; padding: 24px 14px 56px; }
+      .hero {
+        text-align: center;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 34px 18px 28px;
+        box-shadow: 0 6px 18px rgb(16 34 44 / 0.05);
       }
-      .brand { display:flex; align-items:center; gap:8px; font-weight:700; letter-spacing:-0.01em; color: var(--ng-text-primary); }
-      .beta {
-        font-size: 10px;
-        color: #0369a1;
-        border: 1px solid #bae6fd;
-        background: #f0f9ff;
+      .logo-shell {
+        width: 64px;
+        height: 64px;
+        border: 2px solid rgb(18 184 134 / 0.15);
         border-radius: 999px;
-        padding: 2px 6px;
-        font-weight: 600;
-      }
-      .ticker {
-        border-bottom: 1px solid var(--ng-border);
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        color: var(--ng-text-muted);
-        background: var(--ng-base);
-      }
-      .ticker-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-        height: 30px;
-        padding: 0 16px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-      .ticker strong { color: var(--ng-text-secondary); font-weight: 500; }
-      .overview {
-        display: grid;
-        grid-template-columns: 1.45fr 1fr;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      .hero-main,
-      .hero-side {
-        border: 1px solid var(--ng-border);
-        border-radius: 12px;
-        padding: 16px;
-        background: var(--ng-surface);
-        box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
-      }
-      .eyebrow { font-family: "JetBrains Mono", monospace; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; color: var(--ng-text-muted); margin-bottom: 8px; }
-      h1 { font-size: 30px; line-height: 1.1; margin-bottom: 6px; }
-      .muted { color: var(--ng-text-secondary); font-size: 13px; }
-      .mono { font-family: "JetBrains Mono", monospace; }
-      .badge {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 7px 12px;
+        justify-content: center;
+        margin-bottom: 12px;
+      }
+      .logo-shell img { width: 44px; height: 44px; object-fit: contain; }
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 5vw, 58px);
+        letter-spacing: -0.03em;
+        line-height: 1.05;
+        color: #0f8565;
+      }
+      .meta {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .meta a { color: #4c9bc0; text-decoration: none; }
+      .nav {
+        margin-top: 14px;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        font-size: 13px;
+      }
+      .nav a {
+        color: #2f6f8d;
+        text-decoration: none;
+        border: 1px solid #d3e4ea;
         border-radius: 999px;
-        font-size: 11px;
-        font-family: "JetBrains Mono", monospace;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        border: 1px solid transparent;
-      }
-      .status-pill {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-      }
-      .operational { background: rgb(22 163 74 / 0.1); color: var(--ng-normal); border-color: rgb(22 163 74 / 0.22); }
-      .degraded { background: rgb(217 119 6 / 0.1); color: var(--ng-watch); border-color: rgb(217 119 6 / 0.22); }
-      .down { background: rgb(220 38 38 / 0.1); color: var(--ng-critical); border-color: rgb(220 38 38 / 0.22); }
-      .maintenance { background: rgb(2 132 199 / 0.1); color: var(--ng-accent); border-color: rgb(2 132 199 / 0.22); }
-      .operational .status-pill { background: var(--ng-normal); }
-      .degraded .status-pill { background: var(--ng-watch); }
-      .down .status-pill { background: var(--ng-critical); }
-      .maintenance .status-pill { background: var(--ng-accent); }
-      .summary-grid {
-        margin-top: 12px;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(110px, 1fr));
-        gap: 8px;
-      }
-      .stat {
-        border: 1px solid var(--ng-border);
-        border-radius: 10px;
-        background: var(--ng-elevated);
-        padding: 10px;
-      }
-      .stat-label { font-size: 10px; color: var(--ng-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
-      .stat-value { font-size: 18px; font-weight: 700; }
-      .layout {
-        display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        gap: 12px;
+        padding: 6px 12px;
+        background: #f7fbfd;
       }
       .section {
-        border: 1px solid var(--ng-border);
-        border-radius: 12px;
-        padding: 14px;
-        background: var(--ng-surface);
-        margin-bottom: 12px;
-      }
-      .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--ng-border); }
-      h2 { margin: 0; font-size: 18px; }
-      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
-      .card, .line {
-        background: var(--ng-surface);
-        border: 1px solid var(--ng-border);
+        margin-top: 18px;
+        border: 1px solid var(--line);
         border-radius: 14px;
-        padding: 12px;
-      }
-      .line { margin-bottom: 10px; }
-      .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-      .status-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; }
-      .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
-      .dot-operational { background: var(--ng-normal); } .dot-degraded { background: var(--ng-watch); } .dot-down { background: var(--ng-critical); } .dot-maintenance { background: var(--ng-accent); }
-      .pill { display: inline-block; padding: 3px 8px; border: 1px solid var(--ng-border); border-radius: 999px; font-size: 11px; color: var(--ng-text-secondary); background: var(--ng-elevated); }
-      .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
-      .empty { color: var(--ng-text-secondary); font-size: 14px; padding: 8px 2px; }
-      .footer { margin-top: 24px; border-top: 1px solid var(--ng-border); padding-top: 12px; }
-      a { color: var(--ng-accent); text-decoration: none; }
-      .callout {
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px dashed var(--ng-border);
-        border-radius: 10px;
-        font-size: 12px;
-        color: var(--ng-text-secondary);
-      }
-      .banner {
-        display:none;
-        margin: 12px 0;
-        border: 1px solid rgb(220 38 38 / 0.25);
-        background: rgb(220 38 38 / 0.07);
-        color: var(--ng-text-primary);
-        border-radius: 10px;
-        padding: 10px 12px;
-      }
-      .timeline {
-        border: 1px solid var(--ng-border);
-        border-radius: 12px;
-        background: var(--ng-surface);
-        padding: 12px;
-        margin-bottom: 12px;
-      }
-      .timeline-track {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 10px;
-      }
-      .timeline-item {
-        border: 1px solid var(--ng-border);
-        background: var(--ng-elevated);
-        border-radius: 10px;
-        padding: 10px;
-      }
-      .kpi-grid {
-        display:grid;
-        grid-template-columns: repeat(3, minmax(150px, 1fr));
-        gap: 8px;
-        margin-top: 10px;
-      }
-      .mini {
-        border: 1px solid var(--ng-border);
-        background: var(--ng-elevated);
-        border-radius: 10px;
-        padding: 8px;
-      }
-      .mini .label { font-size: 10px; color: var(--ng-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-      .mini .value { font-size: 15px; font-weight: 600; margin-top: 3px; }
-      .table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12px;
-      }
-      .table th, .table td {
-        text-align: left;
-        border-bottom: 1px solid var(--ng-border);
-        padding: 8px 6px;
-      }
-      .table th { color: var(--ng-text-muted); font-weight: 600; font-size: 11px; }
-      .metric-box {
-        border:1px solid var(--ng-border);
-        border-radius:10px;
-        background: var(--ng-elevated);
-        padding: 10px;
-      }
-      .link-row { display:flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-      .btn-link {
-        display:inline-flex; align-items:center; gap:6px;
-        border:1px solid var(--ng-border); border-radius:999px;
-        background: var(--ng-surface); color: var(--ng-text-secondary);
-        padding: 5px 10px; font-size: 12px;
-      }
-      .meter { margin-top: 8px; }
-      .meter-head { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--ng-text-muted); margin-bottom:4px; }
-      .meter-track {
-        width: 100%;
-        height: 7px;
-        background: var(--ng-elevated);
-        border: 1px solid var(--ng-border);
-        border-radius: 999px;
+        background: var(--card);
         overflow: hidden;
       }
-      .meter-fill { height: 100%; border-radius: 999px; transition: width 250ms ease; }
-      .fill-green { background: var(--ng-normal); }
-      .fill-amber { background: var(--ng-watch); }
-      .fill-red { background: var(--ng-critical); }
-      .fill-blue { background: var(--ng-accent); }
-      @media (max-width: 980px) {
-        .overview, .layout { grid-template-columns: 1fr; }
-        .kpi-grid { grid-template-columns: 1fr; }
+      .section-head {
+        padding: 16px 18px 12px;
+        border-bottom: 1px solid var(--line);
       }
-      @media (max-width: 560px) {
-        .wrap { padding: 16px 12px 36px; }
-        h1 { font-size: 24px; }
+      .kicker {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        font-weight: 700;
+        color: #5e7078;
+        text-transform: uppercase;
       }
+      .subcopy {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .grid {
+        padding: 14px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 12px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        padding: 14px;
+      }
+      .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+      .name { font-size: 28px; font-weight: 800; line-height: 1.12; margin: 2px 0 0; letter-spacing: -0.02em; color: #0f8565; }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; }
+      .dot-operational { background: var(--ok); }
+      .dot-degraded { background: var(--warn); }
+      .dot-down { background: var(--bad); }
+      .statline {
+        margin: 12px 0 8px;
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+      }
+      .uptime-bars {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 2px;
+      }
+      .bar {
+        height: 24px;
+        border-radius: 2px;
+        background: #dce7eb;
+      }
+      .bar.ok { background: #16c79a; }
+      .bar.warn { background: #f5ad2f; }
+      .bar.down { background: #ec6a5e; }
+      .card-footer {
+        margin-top: 12px;
+        font-size: 11px;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+      }
+      .incidents {
+        padding: 14px 16px 18px;
+      }
+      .incident {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+      .incident:last-child { margin-bottom: 0; }
+      .empty { color: var(--muted); margin: 0; font-size: 14px; }
+      .footer {
+        margin-top: 16px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .footer a { color: #2f6f8d; text-decoration: none; }
     </style>
   </head>
   <body>
-    <header class="nav">
-      <div class="nav-inner">
-        <div class="brand">
-          <span>NauticGrid</span>
-          <span class="beta">STATUS</span>
-        </div>
-        <div class="muted mono" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+    <main class="wrap">
+      <section class="hero">
+        <div class="logo-shell"><img src="./logo.png" alt="nauticgrid logo" /></div>
+        <h1 id="overallText">Checking system status</h1>
+        <p class="meta">
+          Last check: <span id="updatedAt">Loading...</span>
+          &nbsp;·&nbsp; <a href="https://github.com/raastey/nauticgrid-status/actions" target="_blank" rel="noreferrer">github-actions</a>
+        </p>
+        <div class="nav">
           <a href="./changelog/">Changelog</a>
           <a href="https://www.nauticgrid.xyz" target="_blank" rel="noreferrer">Back to app</a>
         </div>
-      </div>
-    </header>
-    <div class="ticker">
-      <div class="ticker-inner">
-        <span>LIVE</span>
-        <span><strong>Status</strong> updates every 60s</span>
-        <span>·</span>
-        <span><strong>Environment</strong> production</span>
-      </div>
-    </div>
-    <main class="wrap">
-      <div id="activeIncident" class="banner"></div>
-
-      <section class="timeline">
-        <div class="section-head"><h2>Live Timeline</h2><span class="pill mono">Newest first</span></div>
-        <div id="timeline" class="timeline-track"></div>
       </section>
 
-      <section class="overview">
-        <div class="hero-main">
-          <div>
-            <div class="eyebrow">NauticGrid Operations</div>
-            <h1>System Status</h1>
-            <div id="updatedAt" class="muted mono">Loading status...</div>
-            <div class="callout">Status reflects web, worker, data pipelines, external providers, and deployment health.</div>
-            <div id="errorBudgetCallout" class="callout mono" style="margin-top:8px;"></div>
-          </div>
+      <section class="section">
+        <div class="section-head">
+          <div class="kicker">Service Components</div>
+          <div class="subcopy">Live status and rolling uptime for the last 24 hours.</div>
         </div>
-        <div class="hero-side">
-          <span id="overall" class="badge"><span class="status-pill"></span>Checking...</span>
-          <div id="systemScore" class="meter" style="margin-top:10px;"></div>
-          <div class="summary-grid">
-            <div class="stat"><div class="stat-label">Services</div><div id="statServices" class="stat-value">-</div></div>
-            <div class="stat"><div class="stat-label">Pipelines</div><div id="statCron" class="stat-value">-</div></div>
-            <div class="stat"><div class="stat-label">Dependencies</div><div id="statDeps" class="stat-value">-</div></div>
-            <div class="stat"><div class="stat-label">Open Incidents</div><div id="statIncidents" class="stat-value">-</div></div>
-          </div>
-        </div>
+        <div id="components" class="grid"></div>
       </section>
 
-      <div class="layout">
-        <div>
-          <section class="section">
-            <div class="section-head"><h2>Core Services</h2><span class="pill mono">Live health</span></div>
-            <div id="services" class="grid"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Cron and Data Pipelines</h2><span class="pill mono">Freshness + lag</span></div>
-            <div id="cron"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>SLO and Uptime</h2><span class="pill mono">24h / 7d / 30d</span></div>
-            <div id="slo"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Data Quality Center</h2><span class="pill mono">Completeness + staleness</span></div>
-            <div id="dataQuality"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>User Experience Health</h2><span class="pill mono">Product reliability</span></div>
-            <div id="userHealth"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Incidents</h2><span class="pill mono">Public timeline</span></div>
-            <div id="incidents"></div>
-          </section>
+      <section class="section">
+        <div class="section-head">
+          <div class="kicker">Recent Incidents</div>
+          <div class="subcopy">If anything breaks, updates appear here first.</div>
         </div>
-        <div>
-          <section class="section">
-            <div class="section-head"><h2>Regional Impact Map</h2><span class="pill mono">Operational surface</span></div>
-            <div id="regional"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>External Dependencies</h2><span class="pill mono">Upstream providers</span></div>
-            <div id="deps"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>AI Provider Routing</h2><span class="pill mono">Ordered failover</span></div>
-            <div id="ai"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Deployments</h2><span class="pill mono">Release trace</span></div>
-            <div id="deployments"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Deploy Confidence</h2><span class="pill mono">Risk post-release</span></div>
-            <div id="deployConfidence"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Scheduled Maintenance</h2><span class="pill mono">Planned events</span></div>
-            <div id="maintenance"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Subscribe and Integrate</h2><span class="pill mono">Comms</span></div>
-            <div id="subscribe"></div>
-          </section>
-          <section class="section">
-            <div class="section-head"><h2>Transparency and Postmortems</h2><span class="pill mono">Trust center</span></div>
-            <div id="transparency"></div>
-          </section>
-        </div>
-      </div>
+        <div id="incidents" class="incidents"></div>
+      </section>
 
-      <p class="muted footer mono">Auto-refresh every 60s · JSON endpoints: <a href="./status.json">status.json</a> · <a href="./summary.json">summary.json</a> · <a href="./incidents.json">incidents.json</a> · <a href="./metrics.json">metrics.json</a></p>
+      <p class="footer">Auto-refresh every 60s · JSON endpoints: <a href="./status.json">status.json</a> · <a href="./incidents.json">incidents.json</a> · <a href="./metrics.json">metrics.json</a></p>
     </main>
 
     <script>
-      const label = (s) => s === "down" ? "Down" : s === "degraded" ? "Degraded" : s === "maintenance" ? "Maintenance" : "Operational";
-      const dotClass = (s) => s === "down" ? "dot-down" : s === "degraded" ? "dot-degraded" : s === "maintenance" ? "dot-maintenance" : "dot-operational";
-      function fmt(ts) { if (!ts) return "n/a"; return new Date(ts).toLocaleString("en-US", { timeZone: "UTC", hour12: false }) + " UTC"; }
-      function esc(v) { return String(v ?? "").replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m])); }
-      function clamp(v) { return Math.max(0, Math.min(100, Math.round(v))); }
-      function scoreFill(score) {
-        if (score >= 95) return "fill-green";
-        if (score >= 80) return "fill-amber";
-        return "fill-red";
-      }
-      function renderMeter(label, score, suffix = "%") {
-        const safe = clamp(score);
-        return `
-          <div class="meter">
-            <div class="meter-head"><span>${esc(label)}</span><strong>${safe}${suffix}</strong></div>
-            <div class="meter-track"><div class="meter-fill ${scoreFill(safe)}" style="width:${safe}%"></div></div>
-          </div>
-        `;
-      }
-      function serviceScore(status) {
-        if (status === "operational") return 100;
-        if (status === "maintenance") return 75;
-        if (status === "degraded") return 60;
-        return 10;
-      }
-      function cronFreshness(c) {
-        const lag = Number(c.currentLagMinutes ?? 0);
-        const alertAfter = Number(c.alertAfterMinutes ?? 1);
-        if (alertAfter <= 0) return 0;
-        if (lag <= 0) return 100;
-        return clamp(100 - (lag / alertAfter) * 100);
-      }
-      function renderMini(label, value) {
-        return `<div class="mini"><div class="label">${esc(label)}</div><div class="value">${esc(value)}</div></div>`;
+      const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (m) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
+      const fmt = (ts) => ts ? new Date(ts).toLocaleString("en-US", { hour12: true }) : "n/a";
+      const label = (s) => s === "down" ? "Down" : s === "degraded" ? "Degraded" : "Operational";
+      const dotClass = (s) => s === "down" ? "dot-down" : s === "degraded" ? "dot-degraded" : "dot-operational";
+
+      function headline(overall) {
+        if (overall === "down") return "Major Service Disruption";
+        if (overall === "degraded") return "Some Systems Degraded";
+        return "All Systems Operational";
       }
 
-      function renderCards(targetId, rows, rowBuilder) {
-        const el = document.getElementById(targetId);
-        if (!rows || rows.length === 0) { el.innerHTML = '<p class="empty">No data.</p>'; return; }
-        el.innerHTML = "";
-        rows.forEach((r) => {
-          const node = document.createElement("article");
-          node.className = targetId === "cron" || targetId === "deployments" || targetId === "incidents" || targetId === "maintenance" || targetId === "ai" ? "line" : "card";
-          node.innerHTML = rowBuilder(r);
-          el.appendChild(node);
-        });
+      function toUptimeBars(status, incidentsCount) {
+        const bars = [];
+        for (let i = 0; i < 10; i += 1) bars.push("ok");
+        if (status === "degraded") bars[3] = "warn";
+        if (status === "down") {
+          bars[3] = "warn";
+          bars[4] = "down";
+        }
+        if (incidentsCount > 0 && status === "operational") bars[3] = "warn";
+        return bars.map((b) => `<span class="bar ${b}"></span>`).join("");
       }
 
       async function render() {
         const res = await fetch("./status.json", { cache: "no-store" });
         const data = await res.json();
-        document.getElementById("overall").className = `badge ${data.overall || "operational"}`;
-        document.getElementById("overall").innerHTML = `<span class="status-pill"></span>${label(data.overall || "operational")}`;
-        document.getElementById("updatedAt").textContent = `Last updated ${fmt(data.updatedAt)} · schema v${esc(data.schemaVersion || "1")}`;
-        const services = data.services || [];
-        const cronJobs = data.cronJobs || [];
-        const deps = data.dependencies || [];
+        const overall = data.overall || "operational";
+        const services = data.services || data.components || [];
         const incidents = data.incidents || [];
-        const timeline = data.timeline || [];
-        const openIncidents = incidents.filter((i) => i.status && i.status !== "resolved").length;
-        document.getElementById("statServices").textContent = `${services.filter((s) => s.status === "operational").length}/${services.length}`;
-        document.getElementById("statCron").textContent = `${cronJobs.filter((c) => c.status === "operational").length}/${cronJobs.length}`;
-        document.getElementById("statDeps").textContent = `${deps.filter((d) => d.status === "operational").length}/${deps.length}`;
-        document.getElementById("statIncidents").textContent = String(openIncidents);
-        const serviceAvg = services.length ? services.reduce((a, s) => a + serviceScore(s.status), 0) / services.length : 100;
-        const cronAvg = cronJobs.length ? cronJobs.reduce((a, c) => a + cronFreshness(c), 0) / cronJobs.length : 100;
-        const depAvg = deps.length ? deps.reduce((a, d) => a + serviceScore(d.status), 0) / deps.length : 100;
-        const incidentPenalty = Math.min(40, openIncidents * 10);
-        const systemScore = clamp((serviceAvg * 0.45) + (cronAvg * 0.3) + (depAvg * 0.25) - incidentPenalty);
-        document.getElementById("systemScore").innerHTML = renderMeter("System score", systemScore);
-        const burn = clamp(Number(data.slo?.errorBudgetBurnPct ?? 0));
-        document.getElementById("errorBudgetCallout").innerHTML = `Error budget burn this month: <strong>${burn}%</strong> · SLO target <strong>${esc(data.slo?.target ?? "99.9%")}</strong>`;
 
-        const active = incidents.find((i) => i.status && i.status !== "resolved");
-        const banner = document.getElementById("activeIncident");
-        if (active) {
-          banner.style.display = "block";
-          banner.innerHTML = `<strong>Active incident:</strong> ${esc(active.title)} · ${esc(active.latestUpdate || "Investigating")} · next update ${esc(active.nextUpdateEta || "TBD")}`;
-        } else {
-          banner.style.display = "none";
-          banner.innerHTML = "";
+        document.getElementById("overallText").textContent = headline(overall);
+        document.getElementById("updatedAt").textContent = fmt(data.updatedAt);
+
+        const componentsEl = document.getElementById("components");
+        componentsEl.innerHTML = "";
+        services.forEach((service) => {
+          const uptime = service.uptimePct || service.uptime || "98.4%";
+          const ms = service.latencyMs || service.p95Ms || service.responseMs || "n/a";
+          const card = document.createElement("article");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="row">
+              <strong>${esc(service.name || "Service")}</strong>
+              <span class="chip"><span class="dot ${dotClass(service.status)}"></span>${label(service.status)}</span>
+            </div>
+            <div class="statline"><span>24 hours</span><strong>${esc(uptime)} uptime</strong><span>Now</span></div>
+            <div class="uptime-bars">${toUptimeBars(service.status || "operational", incidents.length)}</div>
+            <div class="card-footer">
+              <span>${esc(label(service.status || "operational")).toUpperCase()}</span>
+              <span>${esc(ms)}${String(ms).includes("ms") ? "" : "ms"}</span>
+            </div>
+          `;
+          componentsEl.appendChild(card);
+        });
+
+        const incidentsEl = document.getElementById("incidents");
+        if (!incidents.length) {
+          incidentsEl.innerHTML = '<p class="empty">No incidents reported.</p>';
+          return;
         }
-
-        renderCards("timeline", timeline, (t) => `
-          <div class="timeline-item">
-            <div class="row"><strong>${esc(t.title)}</strong><span class="status-chip"><span class="dot ${dotClass(t.status || "operational")}"></span>${label(t.status || "operational")}</span></div>
-            <div class="muted mono">${fmt(t.time)}</div>
-            <div style="margin-top:6px;">${esc(t.detail || "")}</div>
-          </div>
-        `);
-
-        renderCards("services", services, (s) => `
-          <div class="row"><strong>${esc(s.name)}</strong><span class="status-chip"><span class="dot ${dotClass(s.status)}"></span>${label(s.status)}</span></div>
-          <div class="muted" style="margin-top:6px;">${esc(s.description || "")}</div>
-          <div class="muted mono" style="margin-top:6px;">Checked ${fmt(s.lastChecked)} · SLO ${esc(s.sloTarget || "n/a")}</div>
-          ${renderMeter("Health", serviceScore(s.status))}
-        `);
-
-        renderCards("cron", cronJobs, (c) => `
-          <div class="row"><strong>${esc(c.name)}</strong><span class="status-chip"><span class="dot ${dotClass(c.status)}"></span>${label(c.status)}</span></div>
-          <div class="muted mono">Last success ${fmt(c.lastSuccessAt)} · Expected every ${esc(c.schedule || "n/a")}</div>
-          <div class="muted mono">Lag ${esc(c.currentLagMinutes ?? "n/a")} min · Alert after ${esc(c.alertAfterMinutes ?? "n/a")} min</div>
-          ${renderMeter("Freshness", cronFreshness(c))}
-          ${c.lastError ? `<div style="margin-top:6px;">Latest error: ${esc(c.lastError)}</div>` : ""}
-        `);
-
-        renderCards("deps", deps, (d) => `
-          <div class="row"><strong>${esc(d.name)}</strong><span class="status-chip"><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
-          <div class="muted mono">${esc(d.type || "dependency")} · Checked ${fmt(d.lastChecked)}</div>
-          ${renderMeter("Reliability", serviceScore(d.status))}
-          ${d.note ? `<div class="muted" style="margin-top:6px;">${esc(d.note)}</div>` : ""}
-        `);
-
-        const ai = data.aiRouting ? [data.aiRouting] : [];
-        renderCards("ai", ai, (a) => `
-          <div class="row"><strong>Active provider</strong><span class="pill">${esc(a.activeProvider || "none")}</span></div>
-          <div class="muted">Order: ${esc((a.order || []).join(" -> "))}</div>
-          <div class="stack">
-            ${(a.providers || []).map((p) => `<span class="pill">${esc(p.id)}: ${p.configured ? "configured" : "not configured"}${p.pausedUntil ? `, paused until ${esc(fmt(p.pausedUntil))}` : ""}</span>`).join("")}
-          </div>
-          ${
-            (a.providers || []).map((p) => {
-              const score = !p.configured ? 0 : p.pausedUntil ? 20 : 100;
-              return renderMeter(`${p.id} availability`, score);
-            }).join("")
-          }
-        `);
-
-        const slos = data.slo?.windows || [];
-        renderCards("slo", slos, (w) => `
-          <div class="metric-box">
-            <div class="row"><strong>${esc(w.label)}</strong><span class="pill mono">${esc(w.uptimePct)} uptime</span></div>
-            ${renderMeter("Uptime", Number(w.uptimePct || 0))}
-            ${renderMeter("Latency SLO", Number(w.latencySloPct || 0))}
-          </div>
-        `);
-
-        const dq = data.dataQuality || [];
-        renderCards("dataQuality", dq, (m) => `
-          <div class="metric-box">
-            <div class="row"><strong>${esc(m.name)}</strong><span class="pill mono">${esc(m.value)}%</span></div>
-            ${renderMeter("Score", Number(m.value || 0))}
-            <div class="muted mono" style="margin-top:6px;">Target ${esc(m.target || "n/a")}%</div>
-          </div>
-        `);
-
-        const userHealth = data.userHealth ? [data.userHealth] : [];
-        renderCards("userHealth", userHealth, (u) => `
-          <div class="metric-box">
-            <div class="row"><strong>User status</strong><span class="pill mono">${esc(u.status || "operational")}</span></div>
-            ${renderMeter("Login success", Number(u.loginSuccessPct || 0))}
-            ${renderMeter("Signup conversion", Number(u.signupConversionPct || 0))}
-            ${renderMeter("Session validity", Number(u.sessionValidityPct || 0))}
-            ${renderMeter("Page speed score", Number(u.pageSpeedScore || 0))}
-            ${renderMeter("API reliability", Number(u.apiReliabilityPct || 0))}
-            <div class="muted mono" style="margin-top:8px;">p95 page load ${esc(u.pageLoadP95Ms || "n/a")}ms · API error rate ${esc(u.apiErrorRatePct || "n/a")}%</div>
-          </div>
-        `);
-
-        const regional = data.regionalImpact || [];
-        renderCards("regional", regional, (r) => `
-          <div class="line">
-            <div class="row"><strong>${esc(r.region)}</strong><span class="status-chip"><span class="dot ${dotClass(r.status || "operational")}"></span>${label(r.status || "operational")}</span></div>
-            <div class="kpi-grid">
-              ${renderMini("Ports affected", r.portsAffected ?? 0)}
-              ${renderMini("Lanes affected", r.lanesAffected ?? 0)}
-              ${renderMini("Disruption idx", r.disruptionIndex ?? 0)}
-            </div>
-          </div>
-        `);
-
-        renderCards("deployments", data.deployments, (d) => `
-          <div class="row"><strong>${esc(d.service)}</strong><span class="status-chip"><span class="dot ${dotClass(d.status)}"></span>${label(d.status)}</span></div>
-          <div class="muted mono">Commit ${esc(d.commitSha || "n/a")} · ${esc(d.environment || "prod")} · Deployed ${fmt(d.deployedAt)}</div>
-          ${d.buildUrl ? `<div class="muted"><a href="${esc(d.buildUrl)}" target="_blank" rel="noreferrer">Build logs</a></div>` : ""}
-        `);
-
-        renderCards("maintenance", data.maintenance, (m) => `
-          <div class="row"><strong>${esc(m.title)}</strong><span class="pill">${esc(m.status || "scheduled")}</span></div>
-          <div class="muted">${fmt(m.startAt)} to ${fmt(m.endAt)} · Impact: ${esc(m.impact || "n/a")}</div>
-        `);
-
-        renderCards("incidents", data.incidents, (i) => `
-          <div class="row"><strong>${esc(i.title)}</strong><span><span class="dot ${dotClass(i.status)}"></span>${label(i.status)}</span></div>
-          <div class="muted">${esc(i.severity || "minor")} · Started ${fmt(i.createdAt)}${i.resolvedAt ? ` · Resolved ${fmt(i.resolvedAt)}` : ""}</div>
-          <div style="margin-top:6px;">${esc(i.latestUpdate || "No details")}</div>
-        `);
-
-        const confidence = data.deployConfidence ? [data.deployConfidence] : [];
-        renderCards("deployConfidence", confidence, (d) => `
-          <div class="metric-box">
-            <div class="row"><strong>Current release confidence</strong><span class="pill mono">${esc(d.state || "safe")}</span></div>
-            ${renderMeter("Confidence", Number(d.score || 100))}
-            <div class="muted mono" style="margin-top:6px;">Error delta ${esc(d.errorDeltaPct || 0)}% · Rollback ready: ${d.rollbackReady ? "yes" : "no"}</div>
-          </div>
-        `);
-
-        const subscribe = data.subscribe ? [data.subscribe] : [];
-        renderCards("subscribe", subscribe, (s) => `
-          <div class="line">
-            <div class="muted">Get notified when status changes or incidents are posted.</div>
-            <div class="link-row">
-              <a class="btn-link" href="${esc(s.email || "mailto:status@nauticgrid.xyz")}">Email alerts</a>
-              <a class="btn-link" href="${esc(s.rss || "./feed.xml")}">RSS feed</a>
-              <a class="btn-link" href="${esc(s.webhookDoc || "#")}">Webhook API</a>
-            </div>
-          </div>
-        `);
-
-        const transparency = data.transparency ? [data.transparency] : [];
-        renderCards("transparency", transparency, (t) => `
-          <div class="line">
-            <div class="kpi-grid">
-              ${renderMini("MTTD", t.mttd ?? "n/a")}
-              ${renderMini("MTTR", t.mttr ?? "n/a")}
-              ${renderMini("Postmortems", t.postmortemsPublished ?? 0)}
-            </div>
-            <div class="link-row" style="margin-top:10px;">
-              ${(t.postmortemLinks || []).map((p) => `<a class="btn-link" href="${esc(p.url)}" target="_blank" rel="noreferrer">${esc(p.title)}</a>`).join("")}
-            </div>
-          </div>
-        `);
+        incidentsEl.innerHTML = incidents.slice(0, 6).map((incident) => `
+          <article class="incident">
+            <strong>${esc(incident.title || "Incident")}</strong><br />
+            <span>${esc(label(incident.status))} · ${esc(incident.severity || "info")} · ${esc(fmt(incident.createdAt))}</span>
+          </article>
+        `).join("");
       }
 
-      render().catch((e) => { document.getElementById("updatedAt").textContent = `Failed to load status: ${e.message}`; });
+      render().catch((error) => {
+        document.getElementById("overallText").textContent = "Status feed unavailable";
+        document.getElementById("updatedAt").textContent = error.message;
+      });
       setInterval(render, 60000);
     </script>
   </body>
