@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="What is new and improved in nauticgrid for maritime operators—in plain language." />
+    <title>Changelog · nauticgrid</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+      :root {
+        --ng-base: #fafbfd;
+        --ng-surface: #ffffff;
+        --ng-elevated: #f1f5f9;
+        --ng-border: #e2e8f0;
+        --ng-text-primary: #0f172a;
+        --ng-text-secondary: #475569;
+        --ng-text-muted: #94a3b8;
+        --ng-accent: #0284c7;
+        --ng-critical: #dc2626;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, sans-serif;
+        background: var(--ng-base);
+        color: var(--ng-text-primary);
+      }
+      a {
+        color: var(--ng-accent);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .nav {
+        background: rgb(255 255 255 / 95%);
+        border-bottom: 1px solid var(--ng-border);
+      }
+      .nav-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        height: 56px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        color: var(--ng-text-primary);
+      }
+      .beta {
+        font-size: 10px;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+        background: #f0f9ff;
+        border-radius: 999px;
+        padding: 2px 6px;
+        font-weight: 600;
+      }
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .mono {
+        font-family: ui-monospace, monospace;
+      }
+      .wrap {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 28px 16px 56px;
+      }
+      .muted {
+        color: var(--ng-text-secondary);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 30px;
+        font-weight: 700;
+      }
+      .intro {
+        margin: 0 0 28px;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--ng-text-secondary);
+      }
+      .feed-meta {
+        margin-bottom: 28px;
+      }
+      article.release {
+        background: var(--ng-surface);
+        border: 1px solid var(--ng-border);
+        border-radius: 12px;
+        padding: 18px 18px 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+      }
+      article.release h2 {
+        margin: 0 0 6px;
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .release-date {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ng-text-muted);
+        margin-bottom: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+      .summary {
+        margin: 0 0 14px;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--ng-text-secondary);
+      }
+      .subsection {
+        margin-top: 12px;
+      }
+      .subsection h3 {
+        margin: 0 0 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--ng-text-muted);
+        font-weight: 600;
+      }
+      .subsection ul {
+        margin: 0;
+        padding-left: 1.15rem;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--ng-text-secondary);
+      }
+      .subsection li {
+        margin-bottom: 6px;
+      }
+      section.planned {
+        margin-top: 36px;
+        padding-top: 24px;
+        border-top: 1px solid var(--ng-border);
+      }
+      section.planned h2 {
+        font-size: 20px;
+        margin: 0 0 12px;
+      }
+      .disclaimer {
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 18px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--ng-text-secondary);
+      }
+      .planned-item {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--ng-border);
+      }
+      .planned-item:last-child {
+        border-bottom: none;
+      }
+      .planned-title {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .confidence {
+        font-size: 11px;
+        color: var(--ng-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
+      }
+      .error-box {
+        color: var(--ng-critical);
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <span>NauticGrid</span>
+          <span class="beta">CHANGELOG</span>
+        </div>
+        <nav class="nav-links mono" aria-label="Status site">
+          <a href="../">Status dashboard</a>
+          <span style="color: var(--ng-text-muted)">Changelog</span>
+          <a href="../changelog.json">changelog.json</a>
+          <a href="https://www.nauticgrid.xyz" target="_blank" rel="noreferrer">Back to app</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <h1>Changelog</h1>
+      <p class="intro">
+        These notes describe what changed in the product in language meant for customers and operators—not internal task
+        lists. Security-sensitive details are intentionally omitted; when we harden the service, you will see outcomes described
+        in terms of trust and reliability, not technical exploit mechanics.
+      </p>
+      <p id="feedMeta" class="muted feed-meta" aria-live="polite">Loading changelog…</p>
+      <div id="releases" class="releases"></div>
+      <section id="plannedSection" class="planned" hidden>
+        <h2>Directional themes (not a commitment)</h2>
+        <p id="plannedDisclaimer" class="disclaimer"></p>
+        <div id="plannedList"></div>
+      </section>
+      <p class="muted" style="margin-top: 36px;">
+        Questions? Contact
+        <a href="mailto:info@nauticgrid.xyz">info@nauticgrid.xyz</a>
+      </p>
+    </main>
+
+    <script>
+      function fmtUtc(iso) {
+        if (!iso) return "n/a";
+        return (
+          new Date(iso).toLocaleString("en-US", {
+            timeZone: "UTC",
+            hour12: false,
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          }) + " UTC"
+        );
+      }
+
+      function fmtDate(ymd) {
+        if (!ymd) return "";
+        const [y, m, d] = ymd.split("-").map(Number);
+        const dt = new Date(Date.UTC(y, m - 1, d));
+        return dt.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          timeZone: "UTC",
+        });
+      }
+
+      function listSection(title, items) {
+        if (!items || !items.length) return "";
+        const li = items.map((t) => `<li>${escapeHtml(t)}</li>`).join("");
+        return `
+          <div class="subsection">
+            <h3>${escapeHtml(title)}</h3>
+            <ul>${li}</ul>
+          </div>`;
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      async function render() {
+        const metaEl = document.getElementById("feedMeta");
+        const releasesEl = document.getElementById("releases");
+        try {
+          const res = await fetch("../changelog.json", { cache: "no-store" });
+          if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+          const data = await res.json();
+
+          metaEl.textContent =
+            "Feed updated " + fmtUtc(data.updatedAt) + " · Entries are ordered from newest to oldest.";
+
+          const entries = [...(data.entries || [])].sort((a, b) => {
+            return String(b.publishedAt).localeCompare(String(a.publishedAt));
+          });
+
+          releasesEl.innerHTML = entries
+            .map((e) => {
+              return `
+            <article class="release">
+              <h2>${escapeHtml(e.customerTitle || "Release")}</h2>
+              <div class="release-date">${escapeHtml(fmtDate(e.publishedAt))}</div>
+              <p class="summary">${escapeHtml(e.summary || "")}</p>
+              ${listSection("What is new", e.whatsNew)}
+              ${listSection("Improvements", e.improvements)}
+              ${listSection("Fixes", e.fixes)}
+            </article>`;
+            })
+            .join("");
+
+          const planned = data.planned || [];
+          const disc = data.plannedDisclaimer || "";
+          if (planned.length && disc) {
+            const sec = document.getElementById("plannedSection");
+            document.getElementById("plannedDisclaimer").textContent = disc;
+            document.getElementById("plannedList").innerHTML = planned
+              .map((p) => {
+                const conf = p.confidence ? `Rough confidence: ${escapeHtml(p.confidence)}` : "";
+                return `
+              <div class="planned-item">
+                <div class="confidence">${conf}</div>
+                <div class="planned-title">${escapeHtml(p.title || "")}</div>
+                <p class="muted" style="margin:0;font-size:14px;line-height:1.55;">${escapeHtml(p.notes || "")}</p>
+              </div>`;
+              })
+              .join("");
+            sec.hidden = false;
+          }
+        } catch (err) {
+          metaEl.innerHTML =
+            '<span class="error-box">Could not load changelog.json. If you are browsing a local folder, serve the site root over HTTP.</span>';
+          releasesEl.innerHTML = "";
+          console.error(err);
+        }
+      }
+
+      render();
+    </script>
+  </body>
+</html>

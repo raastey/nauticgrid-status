@@ -1,0 +1,73 @@
+{
+  "updatedAt": "2026-05-10T12:45:00.000Z",
+  "plannedDisclaimer": "The items below are directional themes we are exploring. Timelines change as we learn from customers and operators—nothing here is a delivery promise or contractual commitment.",
+  "entries": [
+    {
+      "id": "2026-05-loading-navigation",
+      "publishedAt": "2026-05-10",
+      "customerTitle": "Clearer, calmer navigation when you open ports and trade lanes",
+      "summary": "When you move from the port or lane directories into a detailed view, the product now acknowledges the navigation immediately instead of staying visually quiet while data loads. Loading states use the same layout shell you see on fully loaded pages, so context does not flicker away. Footer links related to policies are no longer pre-fetched aggressively in the background, which avoids unnecessary work in the browser—especially helpful if you tend to leave nauticgrid open across multiple ship days.",
+      "whatsNew": [
+        "Noticeable skeleton states on transitions into port and lane detail pages, so it is obvious that the app is working even when live feeds and analytics take a moment to arrive."
+      ],
+      "improvements": [
+        "Smoother perceived performance when clicking between many ports or lanes in a single session."
+      ],
+      "fixes": []
+    },
+    {
+      "id": "2026-04-trusted-signin",
+      "publishedAt": "2026-04-18",
+      "customerTitle": "More reliable email sign-in links",
+      "summary": "We tightened how time-limited sign-in links are created and delivered so that requesting access from your inbox is less likely to fail silently. If you use magic links to get into nauticgrid from shared devices or strict corporate mail filters, you should see fewer cases where the link appears to do nothing. We continue to recommend opening links on the same device and browser where you intend to work whenever your security policy allows it.",
+      "whatsNew": [],
+      "improvements": [
+        "Clearer handling and messaging around expired or already-used sign-in links.",
+        "Sender identity aligned with the nauticgrid domain where email authentication allows it, which helps corporate gateways accept the message."
+      ],
+      "fixes": [
+        "Reduced failure cases when submitting the sign-in form with certain edge-case email addresses."
+      ]
+    },
+    {
+      "id": "2026-03-status-surface",
+      "publishedAt": "2026-03-22",
+      "customerTitle": "A public place to see overall product health",
+      "summary": "We introduced a dedicated status experience so you can see whether the main application, background jobs, data feeds, and related services are behaving normally. Status is aimed at answering the simple question, \"Is something broadly wrong right now?\" without exposing internal tooling. Incident history will grow over time when we formally post customer-visible events.",
+      "whatsNew": [
+        "A summarized health view oriented toward operators—not engineering dashboards."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-12-intelligence-core",
+      "publishedAt": "2025-12-01",
+      "customerTitle": "Live disruption picture across ports and chokepoints",
+      "summary": "Early public releases centered on consolidating disruption signals from maritime news and structured congestion cues into port and corridor views aimed at forwarding teams. The goal remains the same today: shorten the gap between noisy global headlines and a concise answer about where your cargoes may feel pressure.",
+      "whatsNew": [
+        "Port-level status and stories tied to major trade gateways.",
+        "Lane-style views that combine origin, destination, and corridor risk for members."
+      ],
+      "improvements": [],
+      "fixes": []
+    }
+  ],
+  "planned": [
+    {
+      "title": "Customer-facing release notes on the status site",
+      "notes": "This page is the first step: dated narratives in everyday language, separate from internal engineering tickets.",
+      "confidence": "high"
+    },
+    {
+      "title": "Deeper clarity on data freshness inside the product",
+      "notes": "Surfacing when each signal was last refreshed so planners can judge how much to trust a number in time-sensitive decisions.",
+      "confidence": "medium"
+    },
+    {
+      "title": "Continued performance work under the hood",
+      "notes": "Faster responses on heavy dashboards and more resilient behavior after deployments, without compromising paywall or privacy rules.",
+      "confidence": "medium"
+    }
+  ]
+}
