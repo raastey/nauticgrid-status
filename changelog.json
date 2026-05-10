@@ -1,41 +1,237 @@
 {
-  "updatedAt": "2026-05-10T12:45:00.000Z",
+  "updatedAt": "2026-05-09T18:30:00.000Z",
   "plannedDisclaimer": "The items below are directional themes we are exploring. Timelines change as we learn from customers and operators—nothing here is a delivery promise or contractual commitment.",
   "entries": [
     {
-      "id": "2026-05-loading-navigation",
-      "publishedAt": "2026-05-10",
-      "customerTitle": "Clearer, calmer navigation when you open ports and trade lanes",
-      "summary": "When you move from the port or lane directories into a detailed view, the product now acknowledges the navigation immediately instead of staying visually quiet while data loads. Loading states use the same layout shell you see on fully loaded pages, so context does not flicker away. Footer links related to policies are no longer pre-fetched aggressively in the background, which avoids unnecessary work in the browser—especially helpful if you tend to leave nauticgrid open across multiple ship days.",
-      "whatsNew": [
-        "Noticeable skeleton states on transitions into port and lane detail pages, so it is obvious that the app is working even when live feeds and analytics take a moment to arrive."
-      ],
+      "id": "2026-05-navigation-perceived-speed",
+      "publishedAt": "2026-05-09",
+      "customerTitle": "Calmer hops between port and lane screens",
+      "summary": "Moving from directories into detailed port or lane views now shows an immediate loading shell that matches the final layout, so the interface does not feel frozen while congestion, weather, stories, and other live pieces stream in behind the scenes. Policy links in the footer are fetched on demand rather than preemptively in the background, which keeps long-lived tabs lighter after each deploy.",
+      "whatsNew": [],
       "improvements": [
-        "Smoother perceived performance when clicking between many ports or lanes in a single session."
+        "Skeleton placeholders on port index, port detail, lane index, and lane detail routes.",
+        "Less accidental background loading of low-priority policy pages while you browse operational data."
       ],
       "fixes": []
     },
     {
-      "id": "2026-04-trusted-signin",
-      "publishedAt": "2026-04-18",
-      "customerTitle": "More reliable email sign-in links",
-      "summary": "We tightened how time-limited sign-in links are created and delivered so that requesting access from your inbox is less likely to fail silently. If you use magic links to get into nauticgrid from shared devices or strict corporate mail filters, you should see fewer cases where the link appears to do nothing. We continue to recommend opening links on the same device and browser where you intend to work whenever your security policy allows it.",
+      "id": "2026-04-story-pipeline-ingest",
+      "publishedAt": "2026-04-26",
+      "customerTitle": "Fresher maritime headlines without an approval bottleneck",
+      "summary": "Newsworthy items from our ingest pipeline can publish straight into the feed when they meet quality checks, rather than sitting in an internal approval queue during busy weeks. Live RSS merges into the cadence where we need supplemental coverage—so corridors with thinner automated coverage still see timely context instead of stale silence.",
+      "whatsNew": [
+        "Streamlined publishing path so vetted stories reach your dashboard sooner during volatile news cycles."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2026-04-cross-check-gdelt",
+      "publishedAt": "2026-04-20",
+      "customerTitle": "Extra corroboration when a headline really matters",
+      "summary": "For certain high-impact stories we now emphasize when additional open-source corroboration is available beyond the originating headline chain. That is meant as a readability signal—not a courtroom guarantee—helping operators decide whether a single outlet’s alarm deserves immediate client communication or deeper desk research.",
+      "whatsNew": [
+        "Corroboration cues layered onto selected kinetic rollup cards where external event data agrees with narrative signals."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2026-04-auth-session-reliability",
+      "publishedAt": "2026-04-12",
+      "customerTitle": "More dependable sign-ins on modern browsers",
+      "summary": "We reworked client session handling so that accounts stay recognized consistently even when browsers split authentication cookies across multiple chunks—a pattern that silently broke navigation for some users. Marketing and legal surfaces that show your signed-in toolbar now load with the same session awareness as operational pages, avoiding confusing double states.",
       "whatsNew": [],
       "improvements": [
-        "Clearer handling and messaging around expired or already-used sign-in links.",
-        "Sender identity aligned with the nauticgrid domain where email authentication allows it, which helps corporate gateways accept the message."
+        "Session provider wraps authenticated experiences so dashboard, guide, billing, and account paths agree on whether you are signed in.",
+        "Smoother coexistence between long-lived subscriptions and shorter magic-link checkpoints."
       ],
       "fixes": [
-        "Reduced failure cases when submitting the sign-in form with certain edge-case email addresses."
+        "Intermittent “signed out everywhere except one panel” inconsistencies on guide, About, and legal surfaces."
       ]
     },
     {
-      "id": "2026-03-status-surface",
-      "publishedAt": "2026-03-22",
-      "customerTitle": "A public place to see overall product health",
-      "summary": "We introduced a dedicated status experience so you can see whether the main application, background jobs, data feeds, and related services are behaving normally. Status is aimed at answering the simple question, \"Is something broadly wrong right now?\" without exposing internal tooling. Incident history will grow over time when we formally post customer-visible events.",
+      "id": "2026-04-macro-freshness-badge",
+      "publishedAt": "2026-04-05",
+      "customerTitle": "At-a-glance freshness on key macro cues",
+      "summary": "A compact freshness indicator highlights when last-mile macro benchmarks (such as the indices that frame your briefing column) crossed our freshness threshold. Operators scanning the dashboard once per morning now get an honest signal whether the number is genuinely current versus carried from the prior closing window.",
       "whatsNew": [
-        "A summarized health view oriented toward operators—not engineering dashboards."
+        "Tiny macro staleness cue adjacent to ticker-class statistics on the home dashboard."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2026-03-status-command-center-sync",
+      "publishedAt": "2026-03-28",
+      "customerTitle": "Status snapshots operators can paste into escalation threads",
+      "summary": "Publishing a snapshot from our admin control plane produces a richer status bundle that aligns with what the public Pages site consumes: component health plus pipeline and dependency framing. Operators can confidently link customers to the canonical status subdomain during incidents without scrambling for internal screenshots.",
+      "whatsNew": [
+        "One-click publish pathway from operations tooling into GitHub-compatible status artifacts."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2026-03-ai-routing-resilience",
+      "publishedAt": "2026-03-14",
+      "customerTitle": "AI summaries stay available when demand spikes",
+      "summary": "When a single inference provider saturates quotas, the router rotates to fallback providers transparently whenever configuration allows. Inline feed status exposes which provider lane is warm and pauses—even if you personally never click that panel—so support has an honest breadcrumb inside customer threads.",
+      "whatsNew": [
+        "Multi-provider failover for AI-generated summaries.",
+        "Visibility into active inference lane and graceful degradation text when quotas pause premium synthesis."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2026-02-lane-health-signed-in",
+      "publishedAt": "2026-02-08",
+      "customerTitle": "Lane health as a personalized layer behind sign-in",
+      "summary": "Signed-in planners now unlock lane-level composites that braid origin congestion, chokepoint deviations, freight-rate volatility, and curated lane stories behind a coherent score. Anonymous visitors retain global port narratives; authenticated ones get corridor-level fidelity tied to bookings they actually defend with clients.",
+      "whatsNew": [
+        "Member-only lane health surface with chokepoint overlays and routed stories."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2026-01-port-registry-expansion",
+      "publishedAt": "2026-01-27",
+      "customerTitle": "Sixty IMF-backed ports instead of thirty-eight",
+      "summary": "We expanded monitored gateways so coverage matches the congestion dataset we trust—not just marquee hubs. Operators running secondary strings (feeder relays, inland feed ports, tactical alternates during blank sailings) are more likely to find their harbor inside the curated registry without begging for spreadsheet exceptions.",
+      "whatsNew": [
+        "Twenty-two additional confirmed ports surfaced with the same IMF PortWatch-aligned congestion scaffolding."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-11-disruption-index",
+      "publishedAt": "2025-11-20",
+      "customerTitle": "Disruption Index: one daily score executives can riff on",
+      "summary": "We introduced an index that compresses heterogeneous disruption proxies into an explainable headline score you can cite on client calls—the idea is conversational clarity rather than mystical black boxes. Automated jobs refresh inputs on cadence aligned with weekday operations; shareable snapshots help forwarders circulate the same framing internally and externally without rebuilding slides from scratch.",
+      "whatsNew": [
+        "Composite disruption score with weekday refresh discipline.",
+        "Home dashboard widget plus shareable disruption snapshot surface for briefings."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-11-ahead-of-market-press-lag",
+      "publishedAt": "2025-11-06",
+      "customerTitle": "Ahead of the market: headline timing cues",
+      "summary": "We measure how maritime-adjacent press clusters relative to curated disruption spikes so you know when mainstream outlets are tardy—or surprisingly early—versus the kinetic signals feeding NauticGrid. The capability is explanatory: it underscores whether your clients already absorbed the rumor mill or whether you carry fresh intelligence.",
+      "whatsNew": [
+        "Press-lag attribution engine with surfaced badge states on marquee dashboard statistics."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-10-ai-sitreps-signed-in",
+      "publishedAt": "2025-10-29",
+      "customerTitle": "AI situation reports on ports for signed-in teams",
+      "summary": "Port detail surfaces gained narrative synthesis paragraphs that braid congestion, disruptions, weather windows, and top headlines into conversational language for supervisors who need shorthand before opening PDF attachments. Outputs remain gated appropriately so anonymous scouts still bump into humane paywalls instead of hallucinated dossiers.",
+      "whatsNew": [
+        "Signed-in AI port summaries with humane pauses during quota pressure."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-10-persona-guided-dashboard",
+      "publishedAt": "2025-10-18",
+      "customerTitle": "Dashboard blurbs tuned to how you introduce yourself",
+      "summary": "After sign-in we adapt supporting microcopy personas (forwarder desks, liners, commodities, financiers—however you categorize yourself) without turning the UX into gimmicky quizzes. Tone stays grounded; the personalization is subtle enough for shared monitors on trading floors.",
+      "whatsNew": [
+        "Persona-aligned dashboard blurbs for authenticated accounts."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-10-dark-theme-polish",
+      "publishedAt": "2025-10-07",
+      "customerTitle": "Dark mode readability pass",
+      "summary": "We harmonized typography contrast, shadows, charts, focus rings, and browser color-scheme hints so night-shift rotations do not punish eyes or accessibility tooling. Charts and KPI tiles keep semantic colors without neon overload.",
+      "whatsNew": [],
+      "improvements": [
+        "Token-level tuning for readability and contrast in dark mode."
+      ],
+      "fixes": [
+        "Charts and KPI tiles readability in inverted palette."
+      ]
+    },
+    {
+      "id": "2025-09-sessions-and-magic-links",
+      "publishedAt": "2025-09-30",
+      "customerTitle": "Longer-lived sessions paired with sharper magic-link windows",
+      "summary": "Staying authenticated for long planning arcs no longer fights default browser expirations: signed-in workstations keep continuity up to twelve months unless you revoke access. Conversely, emailed magic-link handshakes shorten to fifteen minutes—an intentional tightening so mailbox compromise does not leisurely equal account compromise.",
+      "whatsNew": [],
+      "improvements": [
+        "Twelve-month session continuity for authenticated operators who live inside the dashboard daily.",
+        "Fifteen-minute magic-link TTL for unsolicited login attempts."
+      ],
+      "fixes": []
+    },
+    {
+      "id": "2025-09-ports-region-soft-gate",
+      "publishedAt": "2025-09-21",
+      "customerTitle": "Asia-Pacific corridor preview before full port unlock",
+      "summary": "Anonymous visitors contemplating accounts can study a live Asia-Pacific port slice—including disruption coloring and IMF-backed congestion overlays—without scraping the entire world map for free. Converting invites still center on corridors you actually quotation, maintaining fair use for researchers while reserving global intelligence for subscribed cohorts.",
+      "whatsNew": [
+        "Region-scoped anonymized browsing on the port atlas with unobtrusive upgrade prompts elsewhere."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-09-stripe-trust-surfaces",
+      "publishedAt": "2025-09-06",
+      "customerTitle": "Billing, refunds, and trust copy under one accountable roof",
+      "summary": "We shipped Stripe-backed checkout semantics with explicit linkage to refreshed Terms of Service, Privacy Statement, and Refund policies so procurement teams evaluate NauticGrid like any other audited SaaS wedge. Messaging removes vague “everything is free forever” framing in favor of honest metered access tiers and waitlisted capacity cues.",
+      "whatsNew": [
+        "Legal bundle (terms, privacy, refund pathways) surfaced alongside checkout consent.",
+        "Capacity messaging on login surfaces so expectations match operational scale."
+      ],
+      "improvements": [],
+      "fixes": []
+    },
+    {
+      "id": "2025-08-guide-playbook-and-nav",
+      "publishedAt": "2025-08-24",
+      "customerTitle": "In-app playbook for onboarding rotating analysts",
+      "summary": "A structured guide explains corroboration practices, glossary concepts, dashboards, escalation etiquette, and how to read blended feeds without drowning in jargon. Combined with navigation tweaks (active-route emphasis, tightened header capture, chronological story ordering), new hires reach productivity inside a lunch break instead of pestering SMEs for undocumented rituals.",
+      "whatsNew": [
+        "Guide surface with TOC, hero framing, refreshed sections."
+      ],
+      "improvements": [
+        "Active navigation cues and chronological headline ordering on dashboards."
+      ],
+      "fixes": []
+    },
+    {
+      "id": "2025-08-mobile-and-congestion-ux064",
+      "publishedAt": "2025-08-06",
+      "customerTitle": "0.6.4 polish for phones and congested chokepoints",
+      "summary": "Phone layouts tighten persona strips, shorten story-card metadata, clarify congestion summaries on narrow widths, harden OG tiles, and keep hero typography proportional on tiny screens—without rewriting desktop layouts you already rehearsed demos on. Supporting email touchpoints surfaced in-footer so escalations route to accountable humans.",
+      "whatsNew": [],
+      "improvements": [
+        "Touch-friendly congestion summaries and typography scaling tied to breakpoints.",
+        "Inline contact affordance surfaced in footer."
+      ],
+      "fixes": []
+    },
+    {
+      "id": "2025-07-waitlist-guardrails-public-feed",
+      "publishedAt": "2025-07-15",
+      "customerTitle": "Transparent waitlist posture with honored public-data promises",
+      "summary": "We formalized onboarding guardrails capped at accountable capacity so live operations stay humane as demand spikes—and we codified permissible use of supplemental public maritime feeds referenced in onboarding copy. Operators see honest disclosure instead of covert data sourcing folklore.",
+      "whatsNew": [
+        "User-cap tracking with externally communicable fairness narrative.",
+        "Documented honorable use posture for enumerated public reference feeds."
       ],
       "improvements": [],
       "fixes": []
@@ -44,10 +240,10 @@
       "id": "2025-12-intelligence-core",
       "publishedAt": "2025-12-01",
       "customerTitle": "Live disruption picture across ports and chokepoints",
-      "summary": "Early public releases centered on consolidating disruption signals from maritime news and structured congestion cues into port and corridor views aimed at forwarding teams. The goal remains the same today: shorten the gap between noisy global headlines and a concise answer about where your cargoes may feel pressure.",
+      "summary": "Early releases centered on consolidating disruption signals from maritime news flows and structured congestion cues into gateway and chokepoint vantage points geared toward forwarding teams who cannot babysit scanners all day.",
       "whatsNew": [
-        "Port-level status and stories tied to major trade gateways.",
-        "Lane-style views that combine origin, destination, and corridor risk for members."
+        "Port-level status and narratives tied to major trade gateways.",
+        "Corridor vantage points tying origin pressure, chokepoint deviations, and member-only lane framing."
       ],
       "improvements": [],
       "fixes": []
@@ -55,19 +251,19 @@
   ],
   "planned": [
     {
-      "title": "Customer-facing release notes on the status site",
-      "notes": "This page is the first step: dated narratives in everyday language, separate from internal engineering tickets.",
-      "confidence": "high"
-    },
-    {
-      "title": "Deeper clarity on data freshness inside the product",
-      "notes": "Surfacing when each signal was last refreshed so planners can judge how much to trust a number in time-sensitive decisions.",
+      "title": "Deeper freshness callouts beside every KPI",
+      "notes": "Per-widget provenance timelines so supervisors know whether a datapoint refreshed minutes or hours ago before quoting it verbatim to customers.",
       "confidence": "medium"
     },
     {
-      "title": "Continued performance work under the hood",
-      "notes": "Faster responses on heavy dashboards and more resilient behavior after deployments, without compromising paywall or privacy rules.",
+      "title": "Operational changelog automation",
+      "notes": "Tighter linkage between disciplined internal release notes and this customer digest so nothing meaningful ships quietly.",
       "confidence": "medium"
+    },
+    {
+      "title": "Incident-grade postmortems published here after major events",
+      "notes": "Plain-language retrospective summaries when disruptions warrant broad communication—without leaking sensitive forensic detail.",
+      "confidence": "low"
     }
   ]
 }
