@@ -1,7 +1,27 @@
 {
-  "updatedAt": "2026-05-09T18:30:00.000Z",
+  "updatedAt": "2026-08-11T12:38:18.000Z",
   "plannedDisclaimer": "The items below are directional themes we are exploring. Timelines change as we learn from customers and operators—nothing here is a delivery promise or contractual commitment.",
   "entries": [
+    {
+      "id": "2026-08-operator-workspace-and-navigation",
+      "publishedAt": "2026-08-11",
+      "customerTitle": "Operator workspace, with a clearer path through NauticGrid",
+      "summary": "NauticGrid now brings Intelligence and Operator together in one product experience. Intelligence helps you understand what is disrupted; Operator connects your shipment portfolio to relevant evidence, a prioritised exception queue, and customer-update drafts that remain under human control.",
+      "whatsNew": [
+        "Operator is available as a separate USD 50/month workspace subscription for shipment imports, exception workflow, team coordination, and approved draft updates.",
+        "Teams can explore a realistic fictional sample workspace before they connect real cargo. Sample scenarios remain separate from live organisation data.",
+        "The desktop product switcher and mobile More menu now make both products easier to discover and move between."
+      ],
+      "improvements": [
+        "The same footer and essential links now travel with you across Intelligence and Operator.",
+        "Section changes use a steadier transition so moving between parts of the product feels less disruptive.",
+        "Operator keeps evidence, score components, confidence, and the recommended verification step together for each exception."
+      ],
+      "fixes": [
+        "Mobile navigation keeps the More menu visible above the page surface so its links remain reachable.",
+        "Operator is listed in the mobile product menu for signed-out visitors as well as signed-in users."
+      ]
+    },
     {
       "id": "2026-05-navigation-perceived-speed",
       "publishedAt": "2026-05-09",
